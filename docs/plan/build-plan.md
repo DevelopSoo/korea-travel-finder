@@ -19,7 +19,7 @@
 | 1    | 토큰 → `globals.css`, 폰트   | ✅   | 0      |
 | 2    | `/en` 라우트 뼈대, 머리·발   | ✅   | 1      |
 | 3    | 기본 부품 6개                | ✅   | 1      |
-| 4    | 사진·카드 부품 5개           | ⬜   | 3      |
+| 4    | 사진·카드 부품 5개           | ✅   | 3      |
 | 5    | 폼·상태 부품 3개             | ⬜   | 3      |
 | 6    | 페이지 6장 조립 (임시 데이터) | ⬜   | 2·4·5  |
 | 7    | 부품 모음 화면 + 금지 목록 점검 | ⬜ | 6      |
@@ -113,7 +113,7 @@
 
 ---
 
-## 4단계 — 사진·카드 부품 5개
+## 4단계 — 사진·카드 부품 5개 ✅
 
 **읽을 문서**
 - `docs/design-system/photos.md` 전체(캡션 형식, 비율, 로딩 중 회색 네모)
@@ -125,13 +125,13 @@
 
 | 파일                  | 문서    | 핵심 규칙                                                                 |
 | --------------------- | ------- | ------------------------------------------------------------------------- |
-| `Photo.tsx`           | §4-6, §3| `next/image` + `object-cover`, 비율 프롭 `4:5 | 3:2 | 1:1 | full`, 로딩 배경 `line`, 흐림·반짝임 금지. 캡션은 `장소 · 시간` 형식 문자열 하나로 받고 `alt` 에 그대로 쓴다. `captionPosition: below | overlay`(overlay 는 흰색) |
+| `Photo.tsx`           | §4-6, §3| `next/image` + `object-cover`, 비율 프롭 `4:5 | 3:2 | 1:1 | full`, 로딩 배경 `line`, 흐림·반짝임 금지. 캡션은 `장소 · 시간` 형식 문자열 하나로 받고 `alt` 에 그대로 쓴다. `captionPosition: below | overlay | none`(overlay 는 흰색, none 은 작은 카드용 — alt 로만) |
 | `Stars.tsx`           | §4-10   | 채운 별 `accent`, 빈 별 `line`, 12px, 뒤에 Mono 라벨 필수(`EN`, `Local`) |
 | `Tags.tsx`            | §4-12   | `Good for:` + Mono 태그, 간격 8px, 눌리지 않음                             |
 | `ExperienceCard.tsx`  | §4-7    | 세로: 사진 4:5(캡션 overlay) → 뱃지 → 이름 `text-card` → 한 줄 설명 → `Why here, not Seoul`(Mono 소제목 + 본문) → 정보 3개 Mono(`1–2h · Low · ★★★☆☆ EN`). 테두리 `line`, 눌림 시 테두리 `ink`. 카드 전체가 링크 |
 | `ExperienceCardSmall.tsx` | §4-8 | 1:1 사진 + 이름만. 3개 가로, 넘치면 가로 스크롤(부모가 담당)              |
 
-- 카드 데이터 타입은 `src/lib/types.ts` 에 `Experience` 로 정의하되 PRD 표 1 필드명(`slug`, `name_en`, `region`, `time_min/max`, `price`, `english_level`, `local_level`, `photo_caption` …)을 그대로 쓴다. 필드명이 PRD 에 없으면 확인.
+- 카드 데이터 타입은 `src/lib/types.ts` 에 `Experience` 로 정의하되 PRD 표 1 필드명(`slug`, `name_en`, `region`, `duration`, `price_level`, `english_ease`, `localness`, `image_urls`, `image_captions` …)을 그대로 쓴다. 필드명이 PRD 에 없으면 확인. (`image_captions` 는 4단계에서 PRD 에 추가)
 - 임시 사진: `public/photos/` 에 `.webp` 2~3장(폭 1200px). 없으면 `line` 색 빈 네모로 대체하고 캡션만 넣는다. **AI 생성·스톡 미소 모델 사진 금지.**
 
 **완료 확인**
