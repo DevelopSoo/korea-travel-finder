@@ -8,6 +8,9 @@ export type Messages = typeof en;
 
 export const locales = Object.keys(messages) as Locale[];
 
+// params 를 받지 못하는 곳(not-found)에서 쓰는 언어
+export const defaultLocale: Locale = "en";
+
 export const hasLocale = (locale: string): locale is Locale =>
   locale in messages;
 

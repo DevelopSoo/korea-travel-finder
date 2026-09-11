@@ -21,7 +21,8 @@ const ratioClass: Record<PhotoRatio, string> = {
   "4:5": "aspect-4/5",
   "3:2": "aspect-3/2",
   "1:1": "aspect-square",
-  full: "h-svh",
+  // 첫 화면: 부모가 준 높이(머리와 발 사이 남은 공간)를 그대로 채운다
+  full: "h-full",
 };
 
 const contentSizes = "(min-width: 640px) 608px, calc(100vw - 32px)";
@@ -37,7 +38,7 @@ export default function Photo({
   preload,
 }: PhotoProps) {
   return (
-    <div>
+    <div className={ratio === "full" ? "h-full" : undefined}>
       <div
         className={`relative w-full overflow-hidden bg-line ${ratioClass[ratio]}`}
         // 사진이 없을 때도 캡션을 사진 설명으로 읽어 준다
