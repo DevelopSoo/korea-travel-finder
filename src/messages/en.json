@@ -9,5 +9,9 @@
     "instagram": "Instagram",
     "tiktok": "TikTok",
     "privacy": "Privacy"
+  },
+  "common": {
+    "back": "Back",
+    "sending": "Sending…"
   }
 }
