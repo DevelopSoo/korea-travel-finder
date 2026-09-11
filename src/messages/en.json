@@ -1,0 +1,13 @@
+{
+  "site": {
+    "name": "Korea Experience Finder"
+  },
+  "header": {
+    "language": "EN"
+  },
+  "footer": {
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "privacy": "Privacy"
+  }
+}
