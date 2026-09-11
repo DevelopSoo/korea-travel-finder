@@ -336,6 +336,7 @@ Supabase에 표 4개. 경험 표는 배포할 때 한 번 가져와서 굳히고
 | booking_required        | 예/아니오 | 예약 필요                            | false                                                   |
 | map_url                 | 글자      | 구글 지도 링크                       | https://maps.google.com/...                             |
 | image_urls              | 목록      | 사진 주소                            | `["..."]`                                               |
+| image_captions          | 목록      | 사진 캡션 `장소 · 시간` (image_urls 와 같은 순서) | `["Jumunjin, Gangneung · 05:40"]`                       |
 | shorts_url              | 글자      | 관련 쇼츠 링크 (없으면 비움)         | https://...                                             |
 | related_slugs           | 목록      | 관련 경험                            | `["anmok-beach-dawn-coffee"]`                           |
 | is_published            | 예/아니오 | 사이트에 보일지                      | true                                                    |
