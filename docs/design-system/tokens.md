@@ -96,6 +96,7 @@ Inter, Roboto, Poppins는 쓰지 않는다. 너무 흔해서 어디서 본 사�
 색
   paper       #FFFFFF
   ink         #1C1C1A
+  ink-press   #333330   (큰 버튼 눌림에만)
   ink-soft    #6B6B66
   line        #E6E4DF
   accent      #1F4E5F

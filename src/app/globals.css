@@ -6,6 +6,7 @@
   --color-*: initial;
   --color-paper: #ffffff;
   --color-ink: #1c1c1a;
+  --color-ink-press: #333330; /* 큰 버튼 눌림에만 (components.md §4-1) */
   --color-ink-soft: #6b6b66;
   --color-line: #e6e4df;
   --color-accent: #1f4e5f;
