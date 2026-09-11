@@ -35,5 +35,30 @@
       "localName": "Localness",
       "outOf": "{value} of 5"
     }
+  },
+  "email": {
+    "title": "Want this list in your inbox?",
+    "body": "We'll add a few extras.",
+    "label": "Email",
+    "placeholder": "you@email.com",
+    "submit": "Send my list",
+    "note": "No spam. Unsubscribe anytime.",
+    "invalid": "Please check your email.",
+    "sent": "Sent! Check your inbox."
+  },
+  "empty": {
+    "noResults": {
+      "title": "Nothing matched yet.",
+      "body": "Try fewer picks.",
+      "action": "Start over"
+    },
+    "notFound": {
+      "title": "This experience isn't here yet.",
+      "action": "Find your Korea"
+    },
+    "sendFailed": {
+      "title": "Couldn't send.",
+      "body": "Try once more."
+    }
   }
 }
