@@ -27,7 +27,7 @@ Tailwind 이름은 §2 값을 `tailwind.config`에 등록했다고 가정하고 
 
 ### 4-3. 글자 링크
 
-- 글자 `indigo-k`, 밑줄 있음 (밑줄은 글자에서 2px 아래, 두께 1px)
+- 글자 `accent`, 밑줄 있음 (밑줄은 글자에서 2px 아래, 두께 1px)
 - `Start over`, `←` 뒤로, Privacy 등
 
 ### 4-4. 선택 버튼 (Choice) — 질문 화면
@@ -37,8 +37,8 @@ Tailwind 이름은 §2 값을 `tailwind.config`에 등록했다고 가정하고 
 │ Nature & quiet │    │ Nature & quiet │
 └────────────────┘    └────────────────┘
    고르기 전              고른 후
-   테두리 line            테두리 indigo-k 2px
-   배경 paper             배경 paper, 글자 indigo-k
+   테두리 line            테두리 accent 2px
+   배경 paper             배경 paper, 글자 accent
 ```
 
 - 높이 56px, 2열, 사이 8px. 글자 `text-body`
@@ -122,7 +122,7 @@ GANGNEUNG
 ★★★★★ Local  ← 현지감
 ```
 
-- 채운 별 `indigo-k`, 빈 별 `line`. 크기 12px
+- 채운 별 `accent`, 빈 별 `line`. 크기 12px
 - 별 뒤에 무엇에 대한 점수인지 Mono로 적는다. 별만 있으면 뭔지 모른다
 
 ### 4-11. 정보 표 — 상세 페이지
@@ -168,7 +168,7 @@ Good for:  nature  slow  sea
 ```
 
 - 박스 테두리 1px `line`. 배경 흰색 (회색 상자 안에 넣지 않는다)
-- 입력 중: 테두리 `indigo-k`
+- 입력 중: 테두리 `accent`
 - 형식 오류: 테두리 `#B4382A`, 아래 `Please check your email.` (빨간 글씨, text-small). 이 빨강은 오류에만 쓰고 다른 데는 안 쓴다
 - 보낸 후: 박스 내용이 통째로 `Sent! Check your inbox.` 한 줄로 바뀜. 초록 체크 표시, 축하 애니메이션 없음
 

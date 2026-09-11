@@ -41,7 +41,7 @@
 **할 일**
 1. `src/app/layout.tsx`: Geist 2종을 지우고 `next/font/google` 로 **Bricolage Grotesque**, **IBM Plex Sans**, **IBM Plex Mono** 를 CSS 변수(`--font-display`, `--font-sans`, `--font-mono`)로 로드. `metadata` 의 "Create Next App" 문구 제거(임시 제목: `Korea Experience Finder`).
 2. `src/app/globals.css`: `@theme` 블록에 아래를 등록하고, 다크 모드 `@media` 블록과 `Arial` 폰트 선언을 삭제.
-   - 색 `--color-paper / ink / ink-soft / line / indigo-k / error` (값은 tokens.md §6)
+   - 색 `--color-paper / ink / ink-soft / line / accent / error` (값은 tokens.md §6)
    - 폰트 `--font-display / sans / mono`
    - 글자 `--text-display … --text-badge` 7단계 + 각각의 줄 간격
    - 여백 `--spacing-xs … --spacing-2xl` 6단계 (기본 4px 스케일 위에 이름만 추가)
@@ -55,7 +55,7 @@
 **완료 확인**
 - `pnpm build` 통과.
 - `pnpm dev` 로 열었을 때 배경 순백, 글자 먹색, 다크 모드로 바꿔도 색이 안 변한다.
-- 개발자 도구에서 `text-display` `bg-indigo-k` `p-md` `max-w-content` 클래스가 실제 값(40/44px, #1F4E5F, 16px, 640px)으로 나온다.
+- 개발자 도구에서 `text-display` `bg-accent` `p-md` `max-w-content` 클래스가 실제 값(40/44px, #1F4E5F, 16px, 640px)으로 나온다.
 
 **금지**: 하드코딩 색상값·임의 px, 다크 모드, 그림자 토큰(첫 화면 글자 그림자는 6단계에서 인라인 예외로만).
 
@@ -98,8 +98,8 @@
 | ------------------ | ------ | ----------------------------------------------------------------------------- |
 | `ButtonPrimary.tsx`| §4-1   | 높이 52px, `ink` 배경, `paper` 글자, 눌림 `#333330`(문서 명시값 → 토큰 `ink-press` 로 추가), `loading` 이면 글자만 `Sending…` |
 | `ButtonSecondary.tsx`| §4-2 | 높이 44px, 테두리 `line`, `external` 이면 끝에 ↗                                |
-| `TextLink.tsx`     | §4-3   | `indigo-k`, 밑줄 offset 2px 두께 1px. `next/link` 감싼다                      |
-| `ChoiceButton.tsx` | §4-4   | 높이 56px, 선택 시 테두리 `indigo-k` 2px + 글자 `indigo-k`, **배경은 흰색 유지**, 체크 아이콘 없음 |
+| `TextLink.tsx`     | §4-3   | `accent`, 밑줄 offset 2px 두께 1px. `next/link` 감싼다                      |
+| `ChoiceButton.tsx` | §4-4   | 높이 56px, 선택 시 테두리 `accent` 2px + 글자 `accent`, **배경은 흰색 유지**, 체크 아이콘 없음 |
 | `Progress.tsx`     | §4-5   | 왼쪽 ← (TextLink), 오른쪽 `1 / 3` Mono `ink-soft`. 점·막대 금지                 |
 | `RegionBadge.tsx`  | §4-9   | 글자만, `text-badge`, 대문자, 자간 0.08em, `ink-soft`. 배경·테두리 없음          |
 
@@ -126,7 +126,7 @@
 | 파일                  | 문서    | 핵심 규칙                                                                 |
 | --------------------- | ------- | ------------------------------------------------------------------------- |
 | `Photo.tsx`           | §4-6, §3| `next/image` + `object-cover`, 비율 프롭 `4:5 | 3:2 | 1:1 | full`, 로딩 배경 `line`, 흐림·반짝임 금지. 캡션은 `장소 · 시간` 형식 문자열 하나로 받고 `alt` 에 그대로 쓴다. `captionPosition: below | overlay`(overlay 는 흰색) |
-| `Stars.tsx`           | §4-10   | 채운 별 `indigo-k`, 빈 별 `line`, 12px, 뒤에 Mono 라벨 필수(`EN`, `Local`) |
+| `Stars.tsx`           | §4-10   | 채운 별 `accent`, 빈 별 `line`, 12px, 뒤에 Mono 라벨 필수(`EN`, `Local`) |
 | `Tags.tsx`            | §4-12   | `Good for:` + Mono 태그, 간격 8px, 눌리지 않음                             |
 | `ExperienceCard.tsx`  | §4-7    | 세로: 사진 4:5(캡션 overlay) → 뱃지 → 이름 `text-card` → 한 줄 설명 → `Why here, not Seoul`(Mono 소제목 + 본문) → 정보 3개 Mono(`1–2h · Low · ★★★☆☆ EN`). 테두리 `line`, 눌림 시 테두리 `ink`. 카드 전체가 링크 |
 | `ExperienceCardSmall.tsx` | §4-8 | 1:1 사진 + 이름만. 3개 가로, 넘치면 가로 스크롤(부모가 담당)              |
@@ -153,7 +153,7 @@
 | 파일              | 문서   | 핵심 규칙                                                                                   |
 | ----------------- | ------ | ------------------------------------------------------------------------------------------- |
 | `InfoTable.tsx`   | §4-11  | 이름 Mono `ink-soft` / 값 `ink`, 줄 사이 1px `line`, 바깥 테두리·아이콘 없음. 값에 `Stars` 넣을 수 있음 |
-| `EmailBox.tsx`    | §4-13  | 상태 4개: `idle`(테두리 `line`) · `focus`(`indigo-k`) · `error`(`error` 색 + `Please check your email.`) · `sent`(박스 내용이 `Sent! Check your inbox.` 한 줄로 교체). 전송 함수는 프롭으로 받고 이번 단계는 가짜 함수 |
+| `EmailBox.tsx`    | §4-13  | 상태 4개: `idle`(테두리 `line`) · `focus`(`accent`) · `error`(`error` 색 + `Please check your email.`) · `sent`(박스 내용이 `Sent! Check your inbox.` 한 줄로 교체). 전송 함수는 프롭으로 받고 이번 단계는 가짜 함수 |
 | `EmptyState.tsx`  | §4-14  | 문구 두 줄 + 버튼 하나. 문구 3종은 `en.json` 에서. 그림·일러스트 없음                         |
 
 **완료 확인**
