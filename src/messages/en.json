@@ -13,5 +13,27 @@
   "common": {
     "back": "Back",
     "sending": "Sending…"
+  },
+  "experience": {
+    "whyNotSeoul": "Why here, not Seoul",
+    "goodFor": "Good for:",
+    "duration": {
+      "1-2h": "1–2h",
+      "half-day": "Half day",
+      "full-day": "Full day"
+    },
+    "price": {
+      "free": "Free",
+      "low": "Low",
+      "mid": "Mid",
+      "high": "High"
+    },
+    "stars": {
+      "english": "EN",
+      "englishName": "English ease",
+      "local": "Local",
+      "localName": "Localness",
+      "outOf": "{value} of 5"
+    }
   }
 }
