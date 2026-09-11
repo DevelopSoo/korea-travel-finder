@@ -14,6 +14,64 @@
     "back": "Back",
     "sending": "Sending…"
   },
+  "home": {
+    "headline": "Seoul is 1% of Korea.",
+    "sub": "Tell us what you love. We'll show you the Korea you haven't seen.",
+    "cta": "Find my Korea",
+    "note": "Takes 20 seconds. No sign-up."
+  },
+  "find": {
+    "next": "Next",
+    "interest": {
+      "question": "What do you want to feel in Korea?",
+      "hint": "Pick up to 3",
+      "options": {
+        "nature": "Nature & quiet",
+        "local": "Local everyday life",
+        "food": "Food you can't find elsewhere",
+        "history": "History & tradition",
+        "kculture": "K-culture, but deeper",
+        "sea": "Sea & islands"
+      }
+    },
+    "visit": {
+      "question": "Been to Korea before?",
+      "options": {
+        "first": "First time",
+        "once": "Once",
+        "many": "Many times"
+      }
+    },
+    "style": {
+      "question": "How do you travel?",
+      "options": {
+        "slow": "Slow & relaxed",
+        "active": "Active & outdoors",
+        "local_style": "Like a local",
+        "easy": "Comfortable & easy"
+      }
+    }
+  },
+  "results": {
+    "title": "Your Korea",
+    "startOver": "Start over",
+    "summary": {
+      "interest": {
+        "nature": "Nature",
+        "local": "Local",
+        "food": "Food",
+        "history": "History",
+        "kculture": "K-culture",
+        "sea": "Sea"
+      },
+      "style": {
+        "slow": "Slow",
+        "active": "Active",
+        "local_style": "Local-style",
+        "easy": "Easy"
+      }
+    }
+  },
   "experience": {
     "whyNotSeoul": "Why here, not Seoul",
     "goodFor": "Good for:",
@@ -35,6 +93,39 @@
       "localName": "Localness",
       "outOf": "{value} of 5"
     }
+  },
+  "detail": {
+    "info": {
+      "time": "Time",
+      "price": "Price",
+      "best": "Best",
+      "english": "English",
+      "local": "Local",
+      "booking": "Booking"
+    },
+    "durationLong": {
+      "1-2h": "1–2 hours",
+      "half-day": "Half day",
+      "full-day": "Full day"
+    },
+    "booking": {
+      "required": "Required",
+      "notNeeded": "Not needed"
+    },
+    "howToGetThere": "How to get there",
+    "openMaps": "Open in Google Maps",
+    "watchShorts": "Watch on TikTok",
+    "alsoLike": "You might also like",
+    "cta": "Find your Korea"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "paragraphs": [
+      "We only ask for your email when you want your list sent to you. We use it to send that list and, now and then, a few more places we think you'll like.",
+      "We don't sell or share your email. Every email has an unsubscribe link, and one click removes you from the list.",
+      "We keep your answers to the three questions so we can make better suggestions. They are not linked to your name.",
+      "Questions about your data? Reach us through the Instagram or TikTok links below."
+    ]
   },
   "email": {
     "title": "Want this list in your inbox?",

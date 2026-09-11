@@ -21,10 +21,11 @@ export default async function LangLayout({
   return (
     <>
       <Header lang={lang} messages={messages} />
-      <main className="mx-auto w-full max-w-content flex-1 px-md">
+      {/* 세로 flex: 첫 화면 사진이 머리와 발 사이 남은 높이를 채울 수 있게 */}
+      <main className="mx-auto flex w-full max-w-content flex-1 flex-col px-md">
         {children}
       </main>
-      <Footer messages={messages} />
+      <Footer lang={lang} messages={messages} />
     </>
   );
 }
