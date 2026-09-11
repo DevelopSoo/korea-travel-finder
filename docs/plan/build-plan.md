@@ -198,7 +198,8 @@
 - `docs/design-system/index.md` §7 미결 사항
 
 **할 일**
-1. `src/app/[lang]/_ui/page.tsx`(개발 전용, 프로덕션 빌드 제외 여부는 가이드 확인) 에 부품 16개를 상태별로 모두 나열.
+1. `src/app/[lang]/dev/ui/page.tsx`(주소 `/en/dev/ui`, 개발 전용, 프로덕션 빌드 제외 여부는 가이드 확인) 에 부품 16개를 상태별로 모두 나열.
+   - 폴더 이름을 `_ui` 처럼 `_` 로 시작하면 안 된다. Next 가 private folder 로 보고 라우팅에서 뺀다(`01-getting-started/02-project-structure.md` "Private folders").
 2. 폰 폭 스크린샷을 찍어 patterns.md 24개 항목을 하나씩 대조하고 결과를 이 문서 아래 "점검 기록" 에 표로 남긴다.
 3. 자체 점검 3문항에 답을 적는다("사진을 빼면 뭐가 남나" 등).
 4. 미결 2번(쪽빛이 강릉 사진과 겹칠 때) 을 실제 사진 위에서 확인하고 결과만 기록. 색을 바꾸는 결정은 사용자에게.
@@ -226,7 +227,7 @@ src/
       results/page.tsx       → [3] 결과
       experiences/[slug]/page.tsx → [4] 상세
       privacy/page.tsx       → [5] 개인정보
-      _ui/page.tsx           → 부품 모음(개발용)
+      dev/ui/page.tsx        → 부품 모음(개발용, /en/dev/ui)
   components/
     layout/  Header.tsx Footer.tsx
     ui/      ButtonPrimary ButtonSecondary TextLink ChoiceButton Progress RegionBadge
