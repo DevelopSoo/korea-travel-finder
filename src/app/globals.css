@@ -1,58 +1,82 @@
 @import "tailwindcss";
 
-/* 디자인 토큰 — docs/design-system/tokens.md §6 */
+/* 디자인 토큰 v2 — docs/design-system/tokens.md */
 @theme {
   /* 색: 토큰 외 기본 팔레트는 쓰지 않는다 */
   --color-*: initial;
-  --color-paper: #ffffff;
-  --color-ink: #1c1c1a;
-  --color-ink-press: #333330; /* 큰 버튼 눌림에만 (components.md §4-1) */
-  --color-ink-soft: #6b6b66;
-  --color-line: #e6e4df;
-  --color-accent: #1f4e5f;
+
+  /* 바탕 — 종이 계열 4단계 */
+  --color-paper: #f5f3ec; /* 모든 화면 배경 */
+  --color-paper-2: #f0ede4; /* 구역 배경 (시즌 밴드) */
+  --color-paper-3: #eceade; /* 상자 배경 (정보 상자, breadcrumb 띠) */
+  /* 이름이 --text-card 와 부딪히면 안 된다: Tailwind 의 text-* 는 둘 다 본다 */
+  --color-surface: #faf9f3; /* 테두리 있는 카드 안쪽, 입력 칸 */
+
+  /* 글자 — 먹 계열 4단계 */
+  --color-ink: #1c1b18; /* 제목, 기본 글자 */
+  --color-ink-2: #3d3c36; /* 본문 설명 */
+  --color-ink-soft: #55544d; /* 보조 설명 */
+  --color-ink-mute: #7a786e; /* 눈썹 글자(eyebrow), 사진 메모 */
+
+  /* 선 */
+  --color-line: rgb(28 27 24 / 0.12); /* 구분선, 카드 테두리 */
+  --color-line-strong: rgb(28 27 24 / 0.3); /* 보조 버튼, 입력 칸 */
+
+  /* 강조 — 솔잎 그린 하나 */
+  --color-accent: oklch(0.38 0.06 150);
+  --color-accent-press: oklch(0.32 0.06 150);
+  --color-accent-soft: oklch(0.92 0.02 150); /* 강조 밴드 배경 */
+  --color-accent-soft-2: oklch(0.87 0.03 150); /* 태그 알약 배경 */
+
   --color-error: #b4382a;
 
-  /* 글자 크기 / 줄 간격 / 자간 */
-  --text-display: 2.5rem;
-  --text-display--line-height: 2.75rem;
-  --text-display--letter-spacing: -0.01em;
-  --text-title: 1.625rem;
-  --text-title--line-height: 2rem;
-  --text-title--letter-spacing: -0.01em;
-  --text-card: 1.1875rem;
-  --text-card--line-height: 1.5rem;
-  --text-card--letter-spacing: -0.01em;
-  --text-body: 1rem;
-  --text-body--line-height: 1.625rem;
-  --text-small: 0.875rem;
-  --text-small--line-height: 1.25rem;
-  --text-caption: 0.75rem;
-  --text-caption--line-height: 1rem;
-  --text-badge: 0.6875rem;
-  --text-badge--line-height: 0.875rem;
-  --text-badge--letter-spacing: 0.08em;
+  /* 사진 위에 얹는 글자 */
+  --color-on-photo: #ffffff;
+  --color-on-photo-soft: rgb(255 255 255 / 0.6);
 
-  /* 여백: 기본 4px 스케일 위에 이름만 추가 */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2.5rem;
-  --spacing-2xl: 4rem;
+  /* 글자 크기 / 줄 간격 / 자간 */
+  --text-hero: 3.75rem; /* 60 — 첫 화면 h1 */
+  --text-hero--line-height: 1.08;
+  --text-hero--letter-spacing: -0.015em;
+  --text-display: 2.75rem; /* 44 — 페이지 h1 */
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.015em;
+  --text-title: 2.125rem; /* 34 — 구역 제목 */
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.01em;
+  --text-section: 1.625rem; /* 26 — 상자 제목 */
+  --text-section--line-height: 1.2;
+  --text-section--letter-spacing: -0.01em;
+  --text-card: 1.3125rem; /* 21 — 카드 제목 */
+  --text-card--line-height: 1.25;
+  --text-lead: 1.25rem; /* 20 — 제목 밑 한 줄 (Serif) */
+  --text-lead--line-height: 1.45;
+  --text-body: 1rem; /* 16 — 본문 */
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem; /* 14 — 한 줄 설명, 버튼 */
+  --text-small--line-height: 1.5;
+  --text-meta: 0.8125rem; /* 13 — 링크 글씨, 보조 정보 */
+  --text-meta--line-height: 1.45;
+  --text-caption: 0.75rem; /* 12 — breadcrumb, 태그 */
+  --text-caption--line-height: 1.4;
+  --text-eyebrow: 0.6875rem; /* 11 — 카테고리 눈썹 글자 */
+  --text-eyebrow--line-height: 1.3;
+  --text-eyebrow--letter-spacing: 0.14em;
 
   /* 모서리 */
-  --radius-sm: 2px;
-  --radius-md: 4px;
+  --radius-sm: 3px; /* 사진 */
+  --radius-md: 4px; /* 큰 사진, 카드 안 사진 */
+  --radius-lg: 6px; /* 버튼, 카드 */
+  --radius-xl: 8px; /* 상자, 밴드 */
 
   /* 내용 최대 폭 */
-  --container-content: 640px;
+  --container-content: 1200px;
 }
 
 /* 폰트: next/font 가 layout.tsx 에서 만든 변수를 연결 */
 @theme inline {
-  --font-display: var(--font-bricolage), sans-serif;
-  --font-sans: var(--font-plex-sans), sans-serif;
-  --font-mono: var(--font-plex-mono), monospace;
+  --font-display: var(--font-source-serif), Georgia, serif;
+  --font-sans: var(--font-source-sans), system-ui, sans-serif;
 }
 
 :root {
@@ -66,5 +90,22 @@
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+  }
+
+  /* 제목은 언제나 Serif. 각 화면에서 font-display 를 다시 적지 않는다 */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-wrap: pretty;
+  }
+}
+
+@utility gutter {
+  /* 화면 좌우 여백: 폰 20px, PC 44px (tokens.md §2-3) */
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2.75rem;
   }
 }

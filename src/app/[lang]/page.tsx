@@ -1,68 +1,118 @@
-import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
+import ArrowLink from "@/components/ui/ArrowLink";
 import ButtonPrimary from "@/components/ui/ButtonPrimary";
-import Photo from "@/components/ui/Photo";
+import ChipLink from "@/components/ui/ChipLink";
+import Eyebrow from "@/components/ui/Eyebrow";
+import PhotoFrame from "@/components/ui/PhotoFrame";
+import PlaceCard from "@/components/ui/PlaceCard";
+import SectionHeading from "@/components/ui/SectionHeading";
+import { interestIcons } from "@/components/ui/icons";
+import { toPlaceCardItem } from "@/lib/cards";
+import { getPublishedPlaces } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 
-// 첫 화면 사진은 고정 1장 (design §7-3). 사진이 생기면 src 만 채운다
-const hero = {
-  src: null as string | null,
-  caption: "Gangneung · 05:40",
-};
+// 첫 화면에 내놓는 취향 — 샘플 데이터에 실제로 있는 것만 (structure.md §1-4)
+const homeInterests = ["food", "history", "nature", "local"] as const;
 
-// "그림자 없음" 규칙의 유일한 예외 (photos.md §3-4). 반투명 막·글자 배경 상자 금지
-const photoTextShadow: CSSProperties = {
-  textShadow: "0 1px 2px rgba(0,0,0,0.3)",
-};
-
-// [1] 첫 화면 — 머리와 발 사이를 사진이 채우고, 아래쪽에 문구·버튼·캡션 (PRD §4 [1]: 발까지 한 화면)
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const t = getMessages(lang).home;
-  // 사진이 없으면 회색 네모 위 흰 글자가 안 보여 먹색으로 둔다 (Photo overlay 캡션과 같은 방식)
-  const onPhoto = hero.src !== null;
+  const messages = getMessages(lang);
+  const t = messages.home;
+  const places = getPublishedPlaces().map((place) =>
+    toPlaceCardItem(place, lang),
+  );
 
   return (
-    // 사진과 문구를 같은 칸에 겹쳐 쌓는다. 화면이 낮아 문구가 더 길면 칸이 늘어나
-    // 글자가 머리를 덮지 않는다. 문구 칸은 relative 여야 사진(relative) 위에 그려진다.
-    // 폰에서는 몸통 좌우 여백을 넘어 화면 폭 전체를 채운다
-    <section className="-mx-md grid flex-1">
-      <div className="col-start-1 row-start-1">
-        <Photo
-          src={hero.src}
-          caption={hero.caption}
-          ratio="full"
-          captionPosition="none"
-          sizes="(min-width: 640px) 640px, 100vw"
+    <>
+      {/* 첫 화면 사진 — 화면 끝까지 닿는다. 글자는 사진 위 왼쪽 아래 */}
+      <section className="relative">
+        <PhotoFrame
+          src={null}
+          caption={t.hero.caption}
+          seed="home-hero"
+          tone="pine"
+          ratio="fill"
+          rounded="none"
+          captionSide="right"
+          sizes="100vw"
           preload
-        />
-      </div>
-      <div
-        className={`relative col-start-1 row-start-1 flex flex-col gap-md self-end px-md pt-xl pb-lg ${
-          onPhoto ? "text-paper" : "text-ink"
-        }`}
-        style={onPhoto ? photoTextShadow : undefined}
-      >
-        <div className="flex flex-col gap-sm">
-          <h1 className="font-display text-display font-semibold">
-            {t.headline}
-          </h1>
-          <p className="text-body">{t.sub}</p>
-        </div>
-        <div className="flex flex-col gap-sm">
-          {/* 버튼에는 그림자를 주지 않는다 */}
-          <div style={{ textShadow: "none" }}>
-            <ButtonPrimary href={`/${lang}/find`}>{t.cta}</ButtonPrimary>
+          className="min-h-[420px] md:min-h-[440px]"
+        >
+          <div className="mx-auto flex h-full max-w-content flex-col justify-center pt-16 pb-24 text-on-photo gutter">
+            <h1 className="max-w-[12ch] text-4xl md:text-hero">
+              {t.hero.headline}
+            </h1>
+            <p className="mt-5 max-w-[340px] text-lg text-on-photo/90">
+              {t.hero.sub}
+            </p>
+            <div className="mt-7">
+              {/* 사진 위에서는 강조 그린 대신 종이색 버튼을 쓴다 (patterns.md 8번) */}
+              <ButtonPrimary href={`/${lang}/places`} tone="paper" arrow>
+                {t.hero.cta}
+              </ButtonPrimary>
+            </div>
           </div>
-          <p className="text-small">{t.note}</p>
+        </PhotoFrame>
+      </section>
+
+      {/* 취향 칩 — 누르면 그 취향으로 거른 경험 목록으로 간다 */}
+      <section className="mx-auto max-w-content pt-16 pb-6 text-center gutter">
+        <SectionHeading title={t.interests.title} align="center" />
+        <div className="mt-8 flex flex-wrap justify-center gap-5">
+          {homeInterests.map((key) => {
+            const Icon = interestIcons[key];
+            return (
+              <ChipLink
+                key={key}
+                href={`/${lang}/experiences?i=${key}`}
+                label={messages.interest[key]}
+                icon={Icon ? <Icon /> : undefined}
+              />
+            );
+          })}
         </div>
-        {/* alt 가 같은 문장을 읽어 주므로 화면 읽기에서는 뺀다 */}
-        <p aria-hidden="true" className="font-mono text-caption">
-          {hero.caption}
-        </p>
-      </div>
-    </section>
+      </section>
+
+      {/* 장소 */}
+      <section id="places" className="mx-auto max-w-content pt-12 pb-6 gutter">
+        <SectionHeading
+          title={t.places.title}
+          action={
+            <ArrowLink href={`/${lang}/places`}>{t.places.action}</ArrowLink>
+          }
+        />
+        <div className="mt-6 grid gap-[22px] sm:grid-cols-2 lg:grid-cols-4">
+          {places.map((place) => (
+            <PlaceCard key={place.slug} item={place} />
+          ))}
+        </div>
+      </section>
+
+      {/* 시즌 밴드 — 사진 반, 글 반 */}
+      <section className="mt-14 grid bg-paper-2 md:grid-cols-2">
+        <PhotoFrame
+          src={null}
+          caption={t.season.caption}
+          seed="home-season"
+          tone="dusk"
+          ratio="fill"
+          rounded="none"
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="min-h-[260px] md:min-h-[380px]"
+        />
+        <div className="flex flex-col justify-center px-5 py-14 md:px-13">
+          <Eyebrow spacing="wide">{t.season.eyebrow}</Eyebrow>
+          <h2 className="mt-4 text-display">{t.season.title}</h2>
+          <p className="mt-4.5 text-ink-2">{t.season.body}</p>
+          <div className="mt-6.5">
+            <ArrowLink href={`/${lang}/experiences`}>
+              {t.season.action}
+            </ArrowLink>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

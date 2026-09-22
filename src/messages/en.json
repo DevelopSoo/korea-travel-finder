@@ -1,106 +1,137 @@
 {
   "site": {
-    "name": "Korea Experience Finder"
+    "name": "Experience Korea"
   },
-  "header": {
-    "language": "EN"
+  "nav": {
+    "places": "Places",
+    "experiences": "Experiences",
+    "saved": "Saved"
   },
   "footer": {
-    "instagram": "Instagram",
-    "tiktok": "TikTok",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "tagline": "More places. A deeper Korea."
+  },
+  "region": {
+    "gangneung": "Gangneung",
+    "seoul": "Seoul"
   },
   "common": {
-    "back": "Back",
-    "sending": "Sending…"
+    "save": "Save",
+    "saved": "Saved",
+    "remove": "Remove",
+    "share": "Share",
+    "viewExperience": "View experience",
+    "back": "Back"
   },
   "home": {
-    "headline": "Seoul is 1% of Korea.",
-    "sub": "Tell us what you love. We'll show you the Korea you haven't seen.",
-    "cta": "Find my Korea",
-    "note": "Takes 20 seconds. No sign-up."
-  },
-  "find": {
-    "next": "Next",
-    "interest": {
-      "question": "What do you want to feel in Korea?",
-      "hint": "Pick up to 3",
-      "options": {
-        "nature": "Nature & quiet",
-        "local": "Local everyday life",
-        "food": "Food you can't find elsewhere",
-        "history": "History & tradition",
-        "kculture": "K-culture, but deeper",
-        "sea": "Sea & islands"
-      }
+    "hero": {
+      "headline": "There's more Korea to discover.",
+      "sub": "Find places and everyday experiences that make you want to come back.",
+      "cta": "Explore Korea",
+      "caption": "Anmok Beach, Gangneung · 06:20"
     },
-    "visit": {
-      "question": "Been to Korea before?",
-      "options": {
-        "first": "First time",
-        "once": "Once",
-        "many": "Many times"
-      }
+    "interests": {
+      "title": "What brings you closer to Korea?"
     },
-    "style": {
-      "question": "How do you travel?",
-      "options": {
-        "slow": "Slow & relaxed",
-        "active": "Active & outdoors",
-        "local_style": "Like a local",
-        "easy": "Comfortable & easy"
-      }
+    "places": {
+      "title": "Your next Korea starts here.",
+      "action": "Explore all places"
+    },
+    "season": {
+      "eyebrow": "A different season, a different journey",
+      "title": "One more reason to return.",
+      "body": "New seasons. Different places. More stories to bring home.",
+      "action": "Browse every experience",
+      "caption": "Sogeumgang Valley, Gangneung · 16:30"
     }
   },
+  "places": {
+    "title": "Where to go.",
+    "lead": "Start with a place, then choose what to do there.",
+    "eyebrow": "Places",
+    "action": "View region guide",
+    "exploreAction": "Explore experiences",
+    "plan": "Plan your visit",
+    "day": {
+      "eyebrow": "A suggested day",
+      "title": "Make a day of it."
+    },
+    "experiences": {
+      "title": "Find your {place}.",
+      "lead": "Choose the moments you want to make time for."
+    },
+    "cta": {
+      "title": "Keep a little of this place for later.",
+      "body": "Save the experiences you love for your next Korea trip.",
+      "action": "View saved experiences"
+    },
+    "empty": "No experiences here yet."
+  },
+  "experiences": {
+    "eyebrow": "Find your kind of Korea",
+    "title": "What would you love to do?",
+    "lead": "Discover small moments and memorable experiences beyond the familiar.",
+    "filters": {
+      "all": "All",
+      "region": "Region",
+      "allRegions": "All regions",
+      "time": "Time",
+      "anyDuration": "Any duration"
+    },
+    "count": "{count} experiences",
+    "cta": {
+      "title": "Something caught your eye?",
+      "body": "Save your favorite experiences for your next Korea trip.",
+      "action": "View saved experiences"
+    }
+  },
+  "interest": {
+    "nature": "Nature & quiet",
+    "local": "Local everyday life",
+    "food": "Food & markets",
+    "history": "History & tradition",
+    "kculture": "K-culture, but deeper",
+    "sea": "Sea & islands"
+  },
   "results": {
-    "title": "Your Korea",
-    "startOver": "Start over",
     "summary": {
       "interest": {
         "nature": "Nature",
-        "local": "Local",
-        "food": "Food",
-        "history": "History",
+        "local": "Local life",
+        "food": "Food & markets",
+        "history": "Culture & craft",
         "kculture": "K-culture",
-        "sea": "Sea"
-      },
-      "style": {
-        "slow": "Slow",
-        "active": "Active",
-        "local_style": "Local-style",
-        "easy": "Easy"
+        "sea": "Sea & coast"
       }
     }
   },
-  "experience": {
-    "whyNotSeoul": "Why here, not Seoul",
-    "goodFor": "Good for:",
-    "duration": {
-      "1-2h": "1–2h",
-      "half-day": "Half day",
-      "full-day": "Full day"
-    },
-    "price": {
-      "free": "Free",
-      "low": "Low",
-      "mid": "Mid",
-      "high": "High"
-    },
-    "stars": {
-      "english": "EN",
-      "englishName": "English ease",
-      "local": "Local",
-      "localName": "Localness",
-      "outOf": "{value} of 5"
-    }
-  },
   "detail": {
+    "whyNotSeoul": "Why here, not Seoul",
+    "about": "A closer look.",
+    "goodFor": "Is this your kind of day?",
+    "goodForBody": "An easygoing idea for travelers who enjoy taking their time.",
+    "beforeYouGo": "Before you go",
+    "placeGuide": "View {place} guide",
+    "howToGetThere": "How to get there",
+    "openMaps": "Open in Google Maps",
+    "watchShorts": "Watch on TikTok",
+    "nearby": {
+      "title": "While you're in {place}",
+      "lead": "Pair this moment with something nearby."
+    },
+    "note": {
+      "label": "Planning note:",
+      "body": "confirm current details with your chosen venue."
+    },
+    "cta": {
+      "title": "Keep this moment for your next Korea trip.",
+      "action": "View saved experiences"
+    },
     "info": {
       "time": "Time",
       "price": "Price",
-      "best": "Best",
+      "best": "Best time",
       "english": "English",
-      "local": "Local",
       "booking": "Booking"
     },
     "durationLong": {
@@ -108,48 +139,49 @@
       "half-day": "Half day",
       "full-day": "Full day"
     },
-    "booking": {
-      "required": "Required",
-      "notNeeded": "Not needed"
+    "price": {
+      "free": "Free",
+      "low": "Inexpensive",
+      "mid": "Mid-range",
+      "high": "Pricey"
     },
-    "howToGetThere": "How to get there",
-    "openMaps": "Open in Google Maps",
-    "watchShorts": "Watch on TikTok",
-    "alsoLike": "You might also like",
-    "cta": "Find your Korea"
+    "english": {
+      "easy": "Easy to get by in English",
+      "some": "Some English, mostly menus",
+      "little": "Little English — bring a translation app"
+    },
+    "booking": {
+      "required": "Book ahead",
+      "notNeeded": "Just turn up"
+    }
+  },
+  "saved": {
+    "title": "Your next Korea starts here.",
+    "lead": "A little collection of places and moments you want to come back to.",
+    "device": "Saved on this device. Clearing browser data may remove your list.",
+    "heading": "Saved experiences",
+    "countLabel": "{count} saved",
+    "regionGuide": "View region guide",
+    "empty": "Nothing saved here yet — explore and bookmark what you love.",
+    "cta": {
+      "title": "There's more Korea to discover.",
+      "body": "Find another experience to add to your next trip.",
+      "action": "Explore experiences"
+    }
   },
   "privacy": {
     "title": "Privacy",
     "paragraphs": [
-      "We only ask for your email when you want your list sent to you. We use it to send that list and, now and then, a few more places we think you'll like.",
-      "We don't sell or share your email. Every email has an unsubscribe link, and one click removes you from the list.",
-      "We keep your answers to the three questions so we can make better suggestions. They are not linked to your name.",
-      "Questions about your data? Reach us through the Instagram or TikTok links below."
+      "Your saved list stays in this browser. We don't send it anywhere and we can't see it.",
+      "We don't ask for an account, and we don't collect your name or email to use this site.",
+      "Clearing your browser data clears your saved list with it.",
+      "Questions about your data? Reach us through the links at the bottom of any page."
     ]
   },
-  "email": {
-    "title": "Want this list in your inbox?",
-    "body": "We'll add a few extras.",
-    "label": "Email",
-    "placeholder": "you@email.com",
-    "submit": "Send my list",
-    "note": "No spam. Unsubscribe anytime.",
-    "invalid": "Please check your email.",
-    "sent": "Sent! Check your inbox."
-  },
   "empty": {
-    "noResults": {
-      "title": "Nothing matched yet.",
-      "body": "Try fewer picks.",
-      "action": "Start over"
-    },
     "notFound": {
-      "title": "This experience isn't here yet.",
-      "action": "Find your Korea"
-    },
-    "sendFailed": {
-      "title": "Couldn't send.",
-      "body": "Try once more."
+      "title": "This page isn't here yet.",
+      "action": "Explore experiences"
     }
   }
 }

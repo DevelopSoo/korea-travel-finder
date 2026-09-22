@@ -1,275 +1,255 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
+import { useState } from "react";
+import ArrowLink from "@/components/ui/ArrowLink";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import ButtonPrimary from "@/components/ui/ButtonPrimary";
 import ButtonSecondary from "@/components/ui/ButtonSecondary";
-import ChoiceButton from "@/components/ui/ChoiceButton";
-import EmailBox, { type EmailBoxStatus } from "@/components/ui/EmailBox";
+import ChipLink from "@/components/ui/ChipLink";
+import CtaBand from "@/components/ui/CtaBand";
+import DaySteps from "@/components/ui/DaySteps";
 import EmptyState from "@/components/ui/EmptyState";
 import ExperienceCard from "@/components/ui/ExperienceCard";
-import ExperienceCardSmall from "@/components/ui/ExperienceCardSmall";
-import InfoTable from "@/components/ui/InfoTable";
-import Photo, { type PhotoRatio } from "@/components/ui/Photo";
-import Progress from "@/components/ui/Progress";
-import RegionBadge from "@/components/ui/RegionBadge";
-import Stars from "@/components/ui/Stars";
-import Tags from "@/components/ui/Tags";
-import TextLink from "@/components/ui/TextLink";
-import type { Experience, Score } from "@/lib/types";
+import ExperienceCardWide from "@/components/ui/ExperienceCardWide";
+import Eyebrow from "@/components/ui/Eyebrow";
+import FactGrid from "@/components/ui/FactGrid";
+import FilterChip from "@/components/ui/FilterChip";
+import PhotoFrame from "@/components/ui/PhotoFrame";
+import PlaceCard from "@/components/ui/PlaceCard";
+import SaveButton from "@/components/ui/SaveButton";
+import SectionHeading from "@/components/ui/SectionHeading";
+import Select from "@/components/ui/Select";
+import Tag from "@/components/ui/Tag";
+import { Clock, Coins, Sun, Ticket, interestIcons } from "@/components/ui/icons";
+import type { CardItem } from "@/lib/cards";
+import { photoTones } from "@/lib/photoTone";
 import type { Locale, Messages } from "@/messages";
 
 type GalleryProps = {
   lang: Locale;
   messages: Messages;
-  experiences: Experience[];
+  cards: CardItem[];
+  places: CardItem[];
 };
 
-// 가짜 전송 — 누르면 로딩 글자를 잠깐 보여 준다
-async function fakeSend() {
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  return true;
-}
-
-const noop = () => {};
-
-const scores: Score[] = [1, 2, 3, 4, 5];
-const ratios: Exclude<PhotoRatio, "full">[] = ["4:5", "3:2", "1:1"];
-const captionPositions = ["below", "overlay", "none"] as const;
-const emailStates: EmailBoxStatus[] = ["idle", "focus", "error", "failed", "sent"];
-
-// 절 제목·상태 이름은 개발 화면 전용이라 en.json 에 넣지 않는다
-function Section({ name, children }: { name: string; children: ReactNode }) {
+function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-md border-t border-line pt-lg">
-      <h2 className="font-mono text-caption text-ink-soft">{name}</h2>
+    <section className="border-t border-line pt-7 pb-3">
+      <Eyebrow className="mb-4">{title}</Eyebrow>
       {children}
     </section>
   );
 }
 
-function State({ name, children }: { name: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-sm">
-      <p className="font-mono text-caption text-ink-soft">{name}</p>
-      {children}
-    </div>
-  );
-}
-
-export default function Gallery({ lang, messages, experiences }: GalleryProps) {
-  const [picked, setPicked] = useState<string[]>(["nature"]);
-  const t = messages.experience;
-  const sample = experiences[0];
-  // 글 길이가 가장 긴 경험 — 카드 높이가 달라지는지 본다 (patterns.md 24번)
-  const longest = experiences.reduce((a, b) =>
-    b.why_not_seoul_en.length + b.tagline_en.length >
-    a.why_not_seoul_en.length + a.tagline_en.length
-      ? b
-      : a,
-  );
-  const href = (experience: Experience) =>
-    `/${lang}/experiences/${experience.slug}`;
-  const starsLabel = (value: Score) =>
-    `${t.stars.englishName} ${t.stars.outOf.replace("{value}", String(value))}`;
+// 부품 모음 — 개발용. 화면을 만들기 전에 부품이 어떻게 보이는지 확인하는 곳
+export default function Gallery({ lang, messages, cards, places }: GalleryProps) {
+  const [chip, setChip] = useState("food");
+  const [region, setRegion] = useState("all");
+  const labels = {
+    view: messages.common.viewExperience,
+    save: messages.common.save,
+  };
+  const card = cards[0];
 
   return (
-    <div className="flex flex-col gap-xl py-lg">
-      <h1 className="font-display text-title font-semibold text-ink">UI</h1>
+    <div className="mx-auto flex max-w-content flex-col gap-3 py-8 gutter">
+      <h1 className="text-title">Design system v2</h1>
 
-      <Section name="Header">
-        <div className="-mx-md">
-          <Header lang={lang} messages={messages} />
-        </div>
-      </Section>
-
-      <Section name="ButtonPrimary">
-        <State name="link">
-          <ButtonPrimary href={`/${lang}/find`}>{messages.home.cta}</ButtonPrimary>
-        </State>
-        <State name="button">
-          <ButtonPrimary onClick={noop}>{messages.find.next}</ButtonPrimary>
-        </State>
-        <State name="disabled">
-          <ButtonPrimary disabled>{messages.find.next}</ButtonPrimary>
-        </State>
-        <State name="loading">
-          <ButtonPrimary loading loadingLabel={messages.common.sending}>
-            {messages.email.submit}
-          </ButtonPrimary>
-        </State>
-      </Section>
-
-      <Section name="ButtonSecondary">
-        <div className="flex flex-wrap gap-sm">
-          <State name="link">
-            <ButtonSecondary href={`/${lang}/privacy`}>
-              {messages.footer.privacy}
-            </ButtonSecondary>
-          </State>
-          <State name="external">
-            <ButtonSecondary href={sample.map_url} external>
-              {messages.detail.openMaps}
-            </ButtonSecondary>
-          </State>
-          <State name="button">
-            <ButtonSecondary onClick={noop}>{messages.common.back}</ButtonSecondary>
-          </State>
-        </div>
-      </Section>
-
-      <Section name="TextLink">
-        <div className="flex gap-lg">
-          <State name="href">
-            <TextLink href={`/${lang}`}>{messages.results.startOver}</TextLink>
-          </State>
-          <State name="onClick">
-            <TextLink onClick={noop} aria-label={messages.common.back}>
-              ←
-            </TextLink>
-          </State>
-        </div>
-      </Section>
-
-      <Section name="ChoiceButton">
-        <State name="selected / not selected (tap to toggle)">
-          <div className="grid grid-cols-2 gap-sm">
-            {Object.entries(messages.find.interest.options).map(([key, label]) => (
-              <ChoiceButton
-                key={key}
-                selected={picked.includes(key)}
-                onClick={() =>
-                  setPicked((prev) =>
-                    prev.includes(key)
-                      ? prev.filter((item) => item !== key)
-                      : [...prev, key],
-                  )
-                }
-              >
-                {label}
-              </ChoiceButton>
-            ))}
-          </div>
-        </State>
-      </Section>
-
-      <Section name="Progress">
-        <State name="1 / 3">
-          <Progress current={1} total={3} back={{ href: `/${lang}` }} backLabel={messages.common.back} />
-        </State>
-        <State name="3 / 3">
-          <Progress current={3} total={3} back={{ onClick: noop }} backLabel={messages.common.back} />
-        </State>
-      </Section>
-
-      <Section name="RegionBadge">
-        <div className="flex gap-lg">
-          <RegionBadge region="gangneung" />
-          <RegionBadge region="seoul" />
-        </div>
-      </Section>
-
-      <Section name="Photo">
-        {ratios.map((ratio) => (
-          <div key={ratio} className="grid grid-cols-3 gap-sm">
-            {captionPositions.map((position) => (
-              <State key={position} name={`${ratio} ${position}`}>
-                <Photo
-                  src={null}
-                  caption={sample.image_captions[0]}
-                  ratio={ratio}
-                  captionPosition={position}
-                  sizes="200px"
-                />
-              </State>
-            ))}
-          </div>
-        ))}
-        <State name="full (parent sets height)">
-          <div className="h-48">
-            <Photo src={null} caption={sample.image_captions[0]} ratio="full" captionPosition="none" />
-          </div>
-        </State>
-      </Section>
-
-      <Section name="Stars">
-        {scores.map((value) => (
-          <div key={value} className="flex gap-lg">
-            <Stars value={value} label={t.stars.english} ariaLabel={starsLabel(value)} />
-            <Stars value={value} label={t.stars.local} ariaLabel={starsLabel(value)} />
-          </div>
-        ))}
-      </Section>
-
-      <Section name="Tags">
-        <Tags
-          label={t.goodFor}
-          tags={[...new Set([...sample.interest_tags, ...sample.style_tags])]}
-        />
-      </Section>
-
-      <Section name="ExperienceCard (height follows text)">
-        <ExperienceCard experience={sample} href={href(sample)} messages={messages} />
-        <ExperienceCard experience={longest} href={href(longest)} messages={messages} />
-      </Section>
-
-      <Section name="ExperienceCardSmall">
-        <ul className="grid grid-cols-3 gap-sm">
-          {experiences.slice(1, 4).map((experience) => (
-            <li key={experience.slug}>
-              <ExperienceCardSmall experience={experience} href={href(experience)} />
-            </li>
+      <Block title="Color">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            ["paper", "bg-paper"],
+            ["paper-2", "bg-paper-2"],
+            ["paper-3", "bg-paper-3"],
+            ["surface", "bg-surface"],
+            ["ink", "bg-ink"],
+            ["ink-2", "bg-ink-2"],
+            ["ink-soft", "bg-ink-soft"],
+            ["ink-mute", "bg-ink-mute"],
+            ["accent", "bg-accent"],
+            ["accent-press", "bg-accent-press"],
+            ["accent-soft", "bg-accent-soft"],
+            ["accent-soft-2", "bg-accent-soft-2"],
+          ].map(([name, cls]) => (
+            <div key={name}>
+              <div className={`h-14 rounded-md border border-line ${cls}`} />
+              <p className="mt-1 text-caption text-ink-soft">{name}</p>
+            </div>
           ))}
-        </ul>
-      </Section>
+        </div>
+      </Block>
 
-      <Section name="InfoTable">
-        <InfoTable
-          rows={[
-            { label: messages.detail.info.time, value: messages.detail.durationLong[sample.duration] },
-            { label: messages.detail.info.price, value: t.price[sample.price_level] },
-            { label: messages.detail.info.best, value: sample.best_time },
-            {
-              label: messages.detail.info.english,
-              value: <Stars value={sample.english_ease} label={t.stars.english} ariaLabel={starsLabel(sample.english_ease)} />,
-            },
+      <Block title="Type">
+        <div className="flex flex-col gap-2">
+          <p className="font-display text-hero">Hero 60</p>
+          <p className="font-display text-display">Display 44</p>
+          <p className="font-display text-title">Title 34</p>
+          <p className="font-display text-section">Section 26</p>
+          <p className="font-display text-card">Card 21</p>
+          <p className="font-display text-lead">Lead 20</p>
+          <p className="text-body">Body 16 — 본문은 Source Sans 3 로 적는다</p>
+          <p className="text-small">Small 14</p>
+          <p className="text-meta">Meta 13</p>
+          <p className="text-caption">Caption 12</p>
+          <Eyebrow>Eyebrow 11</Eyebrow>
+        </div>
+      </Block>
+
+      <Block title="Photo tones">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {Object.entries(photoTones).map(([name, value]) => (
+            <div key={name}>
+              <div
+                className="aspect-square rounded-sm"
+                style={{ background: value }}
+              />
+              <p className="mt-1 text-caption text-ink-soft">{name}</p>
+            </div>
+          ))}
+        </div>
+      </Block>
+
+      <Block title="Buttons & links">
+        <div className="flex flex-wrap items-center gap-4">
+          <ButtonPrimary href="#" arrow>
+            Primary
+          </ButtonPrimary>
+          <ButtonPrimary href="#" pill arrow>
+            Primary pill
+          </ButtonPrimary>
+          <ButtonSecondary href="#" arrow>
+            Secondary
+          </ButtonSecondary>
+          <ButtonPrimary disabled>Disabled</ButtonPrimary>
+          {card && (
+            <SaveButton
+              slug={card.slug}
+              saveLabel={messages.common.save}
+              savedLabel={messages.common.saved}
+            />
+          )}
+          <ArrowLink href="#">Underlined link</ArrowLink>
+          <ArrowLink href="#" variant="plain" accent>
+            Plain accent link
+          </ArrowLink>
+        </div>
+      </Block>
+
+      <Block title="Chips & select">
+        <div className="flex flex-wrap items-center gap-3">
+          {(["food", "nature", "local"] as const).map((key) => {
+            const Icon = interestIcons[key];
+            return (
+              <FilterChip
+                key={key}
+                label={messages.results.summary.interest[key]}
+                active={chip === key}
+                onClick={() => setChip(chip === key ? "" : key)}
+                icon={Icon ? <Icon /> : undefined}
+              />
+            );
+          })}
+          <FilterChip label="Small" size="sm" active={false} onClick={() => {}} />
+          <ChipLink
+            href={`/${lang}/experiences?i=food`}
+            label="Chip link"
+            icon={interestIcons.food?.({})}
+          />
+          <Select
+            label="Region"
+            value={region}
+            options={[
+              { value: "all", label: "All regions" },
+              { value: "gangneung", label: "Gangneung" },
+            ]}
+            onChange={setRegion}
+          />
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Tag>slow</Tag>
+          <Tag>local style</Tag>
+          <Tag>sea</Tag>
+        </div>
+      </Block>
+
+      <Block title="Headings & breadcrumb">
+        <Breadcrumb
+          items={[{ label: "Home", href: "#" }, { label: "Experiences" }]}
+        />
+        <div className="mt-3">
+          <SectionHeading
+            eyebrow={<Eyebrow spacing="wide">Find your kind of Korea</Eyebrow>}
+            title="What would you love to do?"
+            lead="Discover small moments beyond the familiar."
+            action={<ArrowLink href="#">See all</ArrowLink>}
+          />
+        </div>
+      </Block>
+
+      <Block title="Photo frame">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <PhotoFrame src={null} caption="Gangneung · 06:20" seed="a" ratio="card" />
+          <PhotoFrame src={null} caption="Seoul · 19:40" seed="b" ratio="16:9" />
+          <PhotoFrame src={null} caption="Jumunjin · 05:40" seed="c" ratio="3:2" />
+        </div>
+      </Block>
+
+      <Block title="Cards">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.slice(0, 3).map((item) => (
+            <ExperienceCard
+              key={item.slug}
+              item={item}
+              showRegion
+              labels={labels}
+            />
+          ))}
+        </div>
+        <div className="mt-7 grid gap-6 sm:grid-cols-2">
+          {cards.slice(0, 2).map((item) => (
+            <ExperienceCardWide key={item.slug} item={item} labels={labels} />
+          ))}
+        </div>
+        <div className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {places.map((item) => (
+            <PlaceCard key={item.slug} item={item} />
+          ))}
+        </div>
+      </Block>
+
+      <Block title="Fact grid & day steps">
+        <FactGrid
+          facts={[
+            { icon: <Clock />, title: "Time", desc: "1–2 hours" },
+            { icon: <Coins />, title: "Price", desc: "Inexpensive" },
+            { icon: <Sun />, title: "Best time", desc: "Year-round, 05:00–07:00" },
+            { icon: <Ticket />, title: "Booking", desc: "Just turn up" },
           ]}
         />
-      </Section>
-
-      <Section name="EmailBox">
-        <State name="live (type to try)">
-          <EmailBox messages={messages} onSend={fakeSend} />
-        </State>
-        {emailStates.map((status) => (
-          <State key={status} name={status}>
-            <EmailBox messages={messages} onSend={fakeSend} status={status} />
-          </State>
-        ))}
-      </Section>
-
-      <Section name="EmptyState">
-        <State name="no results">
-          <EmptyState
-            title={messages.empty.noResults.title}
-            body={messages.empty.noResults.body}
-            action={{ label: messages.empty.noResults.action, href: `/${lang}` }}
+        <div className="mt-7 max-w-md">
+          <DaySteps
+            steps={[
+              { title: "Start at the harbor", desc: "Busiest before seven." },
+              { title: "Coffee on the beach road", desc: "Take the slow one." },
+              { title: "Walk the pine trail", desc: "An hour, flat the whole way." },
+            ]}
           />
-        </State>
-        <State name="not found">
-          <EmptyState
-            title={messages.empty.notFound.title}
-            action={{ label: messages.empty.notFound.action, href: `/${lang}/find` }}
-          />
-        </State>
-      </Section>
-
-      <Section name="Footer">
-        <div className="-mx-md">
-          <Footer lang={lang} messages={messages} />
         </div>
-      </Section>
+      </Block>
+
+      <Block title="Band & empty">
+        <CtaBand
+          title="Something caught your eye?"
+          body="Save your favorite experiences for your next Korea trip."
+          action={<ArrowLink href="#" accent>View saved experiences</ArrowLink>}
+        />
+        <div className="mt-6 rounded-xl bg-paper-2">
+          <EmptyState
+            title="Nothing saved here yet — explore and bookmark what you love."
+            action={<ButtonPrimary href="#" arrow>Explore experiences</ButtonPrimary>}
+          />
+        </div>
+      </Block>
     </div>
   );
 }

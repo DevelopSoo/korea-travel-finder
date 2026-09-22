@@ -1,51 +1,56 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ArrowRight } from "./icons";
 
-type ButtonSecondaryProps = {
-  children: ReactNode;
-} & (
-  | {
-      href: string;
-      // 외부로 나가는 링크: 새 탭 + 끝에 ↗
-      external?: boolean;
-    }
-  | { href?: never; external?: never; onClick?: () => void }
-);
+type Common = { children: ReactNode; arrow?: boolean; full?: boolean };
 
-// 보조 버튼 (components.md §4-2). 배경 없음, 테두리 1px line, 높이 44px
-const className =
-  "inline-flex h-11 items-center gap-xs rounded-md border border-line px-md text-body text-ink";
+type ButtonSecondaryProps = Common &
+  (
+    | { href: string; external?: boolean }
+    | {
+        href?: never;
+        type?: "button";
+        onClick?: () => void;
+        // 눌린 상태(저장됨)에서는 바탕을 옅게 채운다
+        active?: boolean;
+      }
+  );
+
+// 보조 버튼 (components.md §4-3). 테두리만 있는 버튼.
+// 마우스를 올리면 테두리만 진해진다 — 배경이 칠해지지 않는다
+const base =
+  "inline-flex items-center justify-center gap-2.5 rounded-lg border px-[22px] py-3 text-small font-semibold text-ink";
+const skin = "border-line-strong hover:border-ink";
 
 export default function ButtonSecondary(props: ButtonSecondaryProps) {
-  if (props.href === undefined) {
-    return (
-      <button
-        type="button"
-        onClick={props.onClick}
-        className={`${className} cursor-pointer`}
-      >
-        {props.children}
-      </button>
-    );
-  }
+  const { children, arrow, full } = props;
+  const width = full ? "w-full" : "";
 
-  if (props.external) {
+  if (props.href !== undefined) {
+    const external = "external" in props && props.external;
     return (
-      <a
+      <Link
         href={props.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
+        className={`${base} ${skin} ${width}`}
+        {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
       >
-        {props.children}
-        <span aria-hidden="true">↗</span>
-      </a>
+        {children}
+        {arrow && <ArrowRight />}
+      </Link>
     );
   }
 
+  const { type = "button", onClick, active } = props;
   return (
-    <Link href={props.href} className={className}>
-      {props.children}
-    </Link>
+    <button
+      type={type}
+      onClick={onClick}
+      className={`${base} ${skin} ${width} cursor-pointer ${
+        active ? "bg-accent-soft" : ""
+      }`}
+    >
+      {children}
+      {arrow && <ArrowRight />}
+    </button>
   );
 }

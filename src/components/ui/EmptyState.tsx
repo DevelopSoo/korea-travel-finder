@@ -1,21 +1,16 @@
-import ButtonPrimary from "./ButtonPrimary";
+import type { ReactNode } from "react";
 
 type EmptyStateProps = {
   title: string;
-  // 두 번째 줄. 404 처럼 한 문장뿐이면 비워 둔다
-  body?: string;
-  action: { label: string; href: string };
+  action?: ReactNode;
 };
 
-// 빈 상태 / 오류 (components.md §4-14). 글 두 줄과 큰 버튼 하나. 그림·일러스트 없음
-export default function EmptyState({ title, body, action }: EmptyStateProps) {
+// 빈 상태 (components.md §4-12). 그림이나 이모지를 넣지 않는다 — 한 줄과 다음 걸음뿐
+export default function EmptyState({ title, action }: EmptyStateProps) {
   return (
-    <div className="flex flex-col gap-lg py-xl">
-      <div>
-        <p className="text-body text-ink">{title}</p>
-        {body && <p className="text-body text-ink">{body}</p>}
-      </div>
-      <ButtonPrimary href={action.href}>{action.label}</ButtonPrimary>
+    <div className="flex flex-col items-center gap-6 py-14 text-center">
+      <p className="font-display text-lead text-ink-soft">{title}</p>
+      {action}
     </div>
   );
 }
