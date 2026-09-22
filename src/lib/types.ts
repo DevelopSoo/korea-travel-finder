@@ -1,5 +1,5 @@
-// 경험 한 개 (PRD §6 표 1 `experiences`). 칸 이름은 표와 똑같이 쓴다.
-// `_en` 칸은 언어가 늘면 `_es`, `_fr` 칸이 옆에 붙는다 (PRD §8).
+// 경험 한 개. 칸 이름은 Supabase 의 `experiences` 표와 똑같이 쓴다.
+// `_en` 칸은 언어가 늘면 `_es`, `_fr` 칸이 옆에 붙는다.
 
 export type Region = "gangneung" | "seoul";
 export type Duration = "1-2h" | "half-day" | "full-day";

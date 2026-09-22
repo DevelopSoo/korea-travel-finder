@@ -7,8 +7,6 @@
 | 상황 | 먼저 읽을 파일 |
 | --- | --- |
 | UI 컴포넌트/화면 작업, 색상·간격·타이포 결정 | `docs/design-system/index.md` → 필요한 문서만 |
-| 기능 구현, 화면·라우트 추가, 요구사항 확인 | `docs/product/index.md` → 해당 기능 문서만 |
-| 디자인 시스템·화면 구축을 단계별로 진행 ("N단계 진행해") | `docs/plan/build-plan.md` → 해당 단계만 |
 | 커밋·브랜치 생성·push·PR 작성 | `docs/git/commit-convention.md` |
 
 목차(`index.md`)를 먼저 읽고, 지금 작업에 해당하는 문서만 골라 읽는다. 디렉터리 전체를 읽지 않는다.

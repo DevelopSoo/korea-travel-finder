@@ -53,7 +53,7 @@ export default function Gallery({ lang, messages, cards, places }: GalleryProps)
 
   return (
     <div className="mx-auto flex max-w-content flex-col gap-3 py-8 gutter">
-      <h1 className="text-title">Design system v2</h1>
+      <h1 className="text-title">Design system</h1>
 
       <Block title="Color">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

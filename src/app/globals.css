@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* 디자인 토큰 v2 — docs/design-system/tokens.md */
+/* 디자인 토큰 — docs/design-system/tokens.md */
 @theme {
   /* 색: 토큰 외 기본 팔레트는 쓰지 않는다 */
   --color-*: initial;
