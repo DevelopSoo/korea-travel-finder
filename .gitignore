@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.agents/
+.mcp.json
+
+.claude/skills/*
+!.claude/skills/design-system/
+!.claude/skills/git-commit/
+!.claude/skills/product-spec/
