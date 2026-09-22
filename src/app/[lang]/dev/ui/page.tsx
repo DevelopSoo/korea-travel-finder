@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { toCardItem, toPlaceCardItem } from "@/lib/cards";
 import { getPublishedExperiences } from "@/lib/experiences";
+import { getPublishedPlaces } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 import Gallery from "./Gallery";
 
@@ -10,19 +12,23 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// 부품 모음 (build-plan 7단계). 개발 전용 — `next build`/`next start` 는
-// NODE_ENV 가 production 이라 404 가 된다
+// 부품 모음. 개발 전용 — `next build`/`next start` 는 NODE_ENV 가 production 이라 404 가 된다
 export default async function UiPage({ params }: PageProps<"/[lang]/dev/ui">) {
   if (process.env.NODE_ENV === "production") notFound();
 
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
+  const messages = getMessages(lang);
+
   return (
     <Gallery
       lang={lang}
-      messages={getMessages(lang)}
-      experiences={getPublishedExperiences()}
+      messages={messages}
+      cards={getPublishedExperiences().map((experience) =>
+        toCardItem(experience, lang, messages),
+      )}
+      places={getPublishedPlaces().map((place) => toPlaceCardItem(place, lang))}
     />
   );
 }

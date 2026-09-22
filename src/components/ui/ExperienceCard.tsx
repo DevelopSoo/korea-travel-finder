@@ -1,65 +1,52 @@
-import Link from "next/link";
-import type { Experience } from "@/lib/types";
-import type { Messages } from "@/messages";
-import Photo from "./Photo";
-import RegionBadge from "./RegionBadge";
-import Stars from "./Stars";
+import type { CardItem } from "@/lib/cards";
+import ArrowLink from "./ArrowLink";
+import BookmarkButton from "./BookmarkButton";
+import Eyebrow from "./Eyebrow";
+import PhotoFrame from "./PhotoFrame";
 
 type ExperienceCardProps = {
-  experience: Experience;
-  href: string;
-  messages: Messages;
+  item: CardItem;
+  // 눈썹 줄에 지역을 함께 적는다 (경험 목록에서만)
+  showRegion?: boolean;
+  labels: { view: string; save: string };
 };
 
-// 경험 카드 큰 것 (components.md §4-7) — 결과 화면.
-// 카드 전체가 링크. 누르면(마우스를 올리면) 테두리만 ink — 커지거나 떠오르지 않는다.
-// 높이를 고정하지 않는다: 글 길이만큼 늘어난다 (patterns.md 24번)
+// 경험 카드 (components.md §4-14). 테두리 없는 카드 — 사진이 카드의 경계다.
+// 높이를 고정하지 않는다: 글 길이만큼 늘어난다
 export default function ExperienceCard({
-  experience,
-  href,
-  messages,
+  item,
+  showRegion,
+  labels,
 }: ExperienceCardProps) {
-  const t = messages.experience;
-
   return (
-    <Link
-      href={href}
-      className="block overflow-hidden rounded-md border border-line bg-paper hover:border-ink active:border-ink"
-    >
-      <Photo
-        src={experience.image_urls[0] ?? null}
-        caption={experience.image_captions[0]}
-        ratio="4:5"
-        captionPosition="overlay"
-      />
-      <div className="p-md">
-        <RegionBadge region={experience.region} />
-        <h2 className="mt-xs font-display text-card font-semibold text-ink">
-          {experience.name_en}
-        </h2>
-        <p className="mt-xs text-small text-ink-soft">
-          {experience.tagline_en}
-        </p>
-        {/* 카드 안에서 눈에 띄는 유일한 자리: 소제목 Mono + 내용 본문 폰트 */}
-        <p className="mt-md font-mono text-caption text-ink-soft">
-          {t.whyNotSeoul}
-        </p>
-        <p className="mt-xs text-small text-ink">
-          {experience.why_not_seoul_en}
-        </p>
-        <p className="mt-md flex flex-wrap items-center gap-md font-mono text-caption text-ink">
-          <span>{t.duration[experience.duration]}</span>
-          <span>{t.price[experience.price_level]}</span>
-          <Stars
-            value={experience.english_ease}
-            label={t.stars.english}
-            ariaLabel={`${t.stars.englishName} ${t.stars.outOf.replace(
-              "{value}",
-              String(experience.english_ease),
-            )}`}
-          />
-        </p>
+    <article className="flex flex-col">
+      <PhotoFrame
+        src={item.src}
+        caption={item.caption}
+        seed={item.slug}
+        ratio="card"
+        sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 100vw"
+      >
+        <BookmarkButton slug={item.slug} label={labels.save} />
+      </PhotoFrame>
+
+      <div className="mt-4 flex items-center gap-2.5">
+        {showRegion && (
+          <>
+            <Eyebrow className="font-semibold text-ink">{item.region}</Eyebrow>
+            <span aria-hidden="true" className="text-line-strong">
+              |
+            </span>
+          </>
+        )}
+        <Eyebrow>{item.category}</Eyebrow>
       </div>
-    </Link>
+
+      <h3 className="mt-1.5 text-card">{item.title}</h3>
+      <p className="mt-1.5 mb-3 text-small text-ink-soft">{item.blurb}</p>
+      <ArrowLink href={item.href} variant="plain">
+        {labels.view}
+      </ArrowLink>
+    </article>
   );
 }

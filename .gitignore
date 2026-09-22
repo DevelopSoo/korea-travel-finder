@@ -46,4 +46,3 @@ next-env.d.ts
 .claude/skills/*
 !.claude/skills/design-system/
 !.claude/skills/git-commit/
-!.claude/skills/product-spec/

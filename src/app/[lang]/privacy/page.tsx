@@ -1,25 +1,36 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import { getMessages, hasLocale } from "@/messages";
 
-// [5] 개인정보 안내 — 글만. 문단은 임시 (PRD 미결 4번 결정 후 교체)
+export const metadata: Metadata = { title: "Privacy" };
+
+// [7] 개인정보 안내 — 글만. 저장 목록이 브라우저에만 남는다는 게 요점이다
 export default async function PrivacyPage({
   params,
 }: PageProps<"/[lang]/privacy">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const t = getMessages(lang).privacy;
+  const messages = getMessages(lang);
+  const t = messages.privacy;
 
   return (
-    <article className="flex flex-col gap-md py-lg">
-      <h1 className="font-display text-title font-semibold text-ink">
-        {t.title}
-      </h1>
-      {t.paragraphs.map((paragraph) => (
-        <p key={paragraph} className="text-body text-ink">
-          {paragraph}
-        </p>
-      ))}
-    </article>
+    <>
+      <Breadcrumb
+        items={[
+          { label: messages.site.name, href: `/${lang}` },
+          { label: t.title },
+        ]}
+      />
+      <article className="mx-auto max-w-[68ch] pt-6 gutter">
+        <h1 className="text-title">{t.title}</h1>
+        <div className="mt-5 flex flex-col gap-4 text-ink-2">
+          {t.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </article>
+    </>
   );
 }

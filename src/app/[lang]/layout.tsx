@@ -21,10 +21,8 @@ export default async function LangLayout({
   return (
     <>
       <Header lang={lang} messages={messages} />
-      {/* 세로 flex: 첫 화면 사진이 머리와 발 사이 남은 높이를 채울 수 있게 */}
-      <main className="mx-auto flex w-full max-w-content flex-1 flex-col px-md">
-        {children}
-      </main>
+      {/* 폭은 화면마다 다르다 — 첫 화면 사진 구역은 화면 끝까지 닿는다 */}
+      <main className="flex-1">{children}</main>
       <Footer lang={lang} messages={messages} />
     </>
   );

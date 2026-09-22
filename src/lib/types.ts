@@ -1,5 +1,5 @@
-// 경험 한 개 (PRD §6 표 1 `experiences`). 칸 이름은 표와 똑같이 쓴다.
-// `_en` 칸은 언어가 늘면 `_es`, `_fr` 칸이 옆에 붙는다 (PRD §8).
+// 경험 한 개. 칸 이름은 Supabase 의 `experiences` 표와 똑같이 쓴다.
+// `_en` 칸은 언어가 늘면 `_es`, `_fr` 칸이 옆에 붙는다.
 
 export type Region = "gangneung" | "seoul";
 export type Duration = "1-2h" | "half-day" | "full-day";
@@ -33,4 +33,32 @@ export type Experience = {
   is_published: boolean;
   created_at: string;
   updated_at: string;
+};
+
+// 장소 한 개 (지역 안내 페이지 = /[lang]/places/{slug}).
+// 경험(Experience)이 "무엇을 하는가"라면 장소는 "어디로 가는가"다.
+export type Place = {
+  slug: string;
+  region: Region;
+  name_en: string;
+  // 제목 위 눈썹 글자. "Gangwon · East Coast"
+  area_en: string;
+  // 제목 밑 한 줄
+  tagline_en: string;
+  // 본문 구역 제목
+  headline_en: string;
+  // 본문 구역 제목 밑 한 줄
+  lead_en: string;
+  // 오른쪽 단 설명 글
+  description_en: string;
+  // 첫 화면 카드에 쓰는 짧은 한 줄
+  card_tagline_en: string;
+  // 사진 캡션 = alt 텍스트 (photos.md §3-1)
+  hero_caption: string;
+  card_caption: string;
+  // "Plan your visit" 상자 — 3개
+  plan: { title_en: string; desc_en: string }[];
+  // "Make a day of it" 하루 흐름 — 3개
+  day: { title_en: string; desc_en: string }[];
+  is_published: boolean;
 };
