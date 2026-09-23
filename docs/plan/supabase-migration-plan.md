@@ -161,6 +161,15 @@ erDiagram
 - 배포 후: 대시보드에서 경험 문구를 고치면 웹훅을 거쳐 새로고침 한두 번 안에 바뀐다.
 - `pnpm build`, `pnpm lint` 통과. Supabase advisors 경고 없음.
 
+**진행 기록 (2026-09-23, 브랜치 `feat/supabase-content-db`)**
+- Cache Components는 켠 채로 유지했다. 빌드를 막은 곳은 `/experiences`의 `?i=` 읽기 한 곳뿐이었고, 그 부분만 `<Suspense>`로 감쌌다 (기다리는 동안에는 전체 목록을 보여 준다).
+- `Region` 타입은 `string`으로 풀었다. 지역 이름은 `places.name_en` 한 곳에서만 가져오고 `en.json`의 `region` 묶음은 지웠다. 대시보드에서 지역을 늘려도 코드를 고칠 필요가 없다.
+- 지역 목록 순서는 `region` 값의 알파벳순, 경험은 `id` 순이다. 순서를 직접 정해야 하면 순서 칸을 따로 추가한다.
+- DB에는 예전 실험에서 남은 `public.set_updated_at()`(SECURITY DEFINER)이 있었다. 마이그레이션에서 `create or replace`로 SECURITY INVOKER로 바꾸고 실행 권한을 거뒀다.
+- 새 표에 RLS를 자동으로 켜는 이벤트 트리거 함수 `public.rls_auto_enable()`(Supabase 문서 예제로 설치됨)을 누구나 실행할 수 있어 advisors가 경고했다. 직접 불러도 바뀌는 것은 없음을 확인한 뒤, 경고를 없애려고 `public`·`anon`·`authenticated`의 실행 권한을 거뒀다. 새 표 RLS 자동 켜기는 그대로 동작한다. 이 함수는 저장소 마이그레이션이 아니라 대시보드에서 만들어졌으므로, 새 프로젝트에 마이그레이션을 다시 적용할 때는 이 함수가 먼저 있어야 한다.
+- `revalidateTag(…, 'max')`는 비운 직후 첫 요청에는 이전 내용을 주고 그동안 새로 읽는다. 로컬에서 비공개 전환 → 캐시 비우기 → 수 초 안에 목록·지역 상세·경험 상세(404)에서 사라지는 것을 확인했다.
+- **웹훅 설정 시 필요한 값:** `POST https://<배포 주소>/api/revalidate`, 헤더 `x-revalidate-secret: <REVALIDATE_SECRET>`. 배포 환경변수에 `REVALIDATE_SECRET`을 같은 값으로 넣어야 한다 (없으면 500).
+
 ### 2단계 — 이메일·비밀번호 로그인
 
 **목표:** 원하는 사람만 가입·로그인·로그아웃할 수 있다. 로그인하지 않은 사람의 경험은 지금과 똑같다.
