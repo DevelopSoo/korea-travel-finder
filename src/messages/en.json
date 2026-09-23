@@ -209,5 +209,13 @@
       "title": "This page isn't here yet.",
       "action": "Explore experiences"
     }
+  },
+  "notice": {
+    "saveFailed": "Couldn't save that. Check your connection and try again.",
+    "removeFailed": "Couldn't remove that. Check your connection and try again.",
+    "syncFailed": "Couldn't load your saved list.",
+    "removed": "Removed from your saved list.",
+    "retry": "Try again",
+    "undo": "Undo"
   }
 }

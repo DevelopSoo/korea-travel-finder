@@ -23,6 +23,7 @@ import Tag from "@/components/ui/Tag";
 import TextField from "@/components/ui/TextField";
 import { Clock, Coins, Sun, Ticket, interestIcons } from "@/components/ui/icons";
 import type { CardItem } from "@/lib/cards";
+import { showNotice } from "@/lib/notice";
 import { photoTones } from "@/lib/photoTone";
 import type { Locale, Messages } from "@/messages";
 
@@ -183,6 +184,18 @@ export default function Gallery({ lang, messages, cards, places }: GalleryProps)
             hint="At least 8 characters."
             invalid
           />
+        </div>
+      </Block>
+
+      {/* 알림줄은 레이아웃에 하나만 있다 — 여기서는 띄우기만 한다 */}
+      <Block title="Notice">
+        <div className="flex flex-wrap gap-3">
+          <ButtonSecondary onClick={() => showNotice("saveFailed", () => {})}>
+            Save failed
+          </ButtonSecondary>
+          <ButtonSecondary onClick={() => showNotice("removed", () => {})}>
+            Removed
+          </ButtonSecondary>
         </div>
       </Block>
 
