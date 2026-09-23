@@ -7,7 +7,9 @@ import ExperienceCardWide from "@/components/ui/ExperienceCardWide";
 import FilterChip from "@/components/ui/FilterChip";
 import { Bookmark } from "@/components/ui/icons";
 import type { CardItem } from "@/lib/cards";
-import { useSaved } from "@/lib/useSaved";
+import { showNotice } from "@/lib/notice";
+import { useAuth } from "@/lib/useAuth";
+import { restoreSaved, useSaved } from "@/lib/useSaved";
 
 export type SavedItem = CardItem & {
   regionSlug: string;
@@ -30,20 +32,29 @@ type SavedListProps = {
   };
 };
 
-// 저장 목록은 브라우저에만 있으므로 서버에서 미리 그릴 수 없다.
+// 저장 목록은 브라우저(또는 로그인한 사람의 계정)에서 읽으므로 서버에서 미리 그릴 수 없다.
 // 첫 그림에서는 아무것도 없다가 브라우저에서 채워진다 — 그래서 빈 상태가 잠깐 보인다
 export default function SavedList({ items, labels }: SavedListProps) {
   const { slugs, remove } = useSaved();
+  const { user } = useAuth();
   const [region, setRegion] = useState("all");
 
-  // 목록에서 사라진 경험(비공개로 바뀐 것)이 남아 있으면 머리의 숫자만 늘어난다.
-  // 이 화면이 전체 목록을 아는 유일한 곳이라 여기서 지운다
+  // 목록에서 사라진 경험(비공개로 바뀐 것)이 이 기기 목록에 남아 있으면 머리의 숫자만 늘어난다.
+  // 이 화면이 전체 목록을 아는 유일한 곳이라 여기서 지운다.
+  // 계정 목록은 지우지 않는다 — 경험이 다시 공개되면 돌아오게 (계획 3단계). 화면에서만 걸러진다
   useEffect(() => {
+    if (user !== null) return;
     const known = new Set(items.map((item) => item.slug));
     for (const slug of slugs) {
       if (!known.has(slug)) remove(slug);
     }
-  }, [items, slugs, remove]);
+  }, [items, slugs, remove, user]);
+
+  // 저장 해제는 실행 취소할 수 있다 (인수인계 §9.2)
+  const handleRemove = (slug: string) => {
+    remove(slug);
+    showNotice("removed", () => restoreSaved(slug));
+  };
 
   const saved = items.filter((item) => slugs.includes(item.slug));
   const regions = [...new Set(saved.map((item) => item.regionSlug))];
@@ -134,7 +145,7 @@ export default function SavedList({ items, labels }: SavedListProps) {
                       </ArrowLink>
                       <button
                         type="button"
-                        onClick={() => remove(item.slug)}
+                        onClick={() => handleRemove(item.slug)}
                         className="cursor-pointer p-0.5 text-meta text-ink-soft underline hover:text-ink"
                       >
                         {labels.remove}
