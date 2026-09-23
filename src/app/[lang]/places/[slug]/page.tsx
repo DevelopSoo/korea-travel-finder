@@ -20,15 +20,16 @@ import {
 } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 
-export function generateStaticParams() {
-  return getPublishedPlaces().map((place) => ({ slug: place.slug }));
+export async function generateStaticParams() {
+  const places = await getPublishedPlaces();
+  return places.map((place) => ({ slug: place.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[lang]/places/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const place = getPlace(slug);
+  const place = await getPlace(slug);
   if (!place) return {};
   return { title: place.name_en, description: place.tagline_en };
 }
@@ -43,13 +44,13 @@ export default async function PlacePage({
   const { lang, slug } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const place = getPlace(slug);
+  const place = await getPlace(slug);
   if (!place) notFound();
 
   const messages = getMessages(lang);
   const t = messages.places;
-  const experiences = getPlaceExperiences(place).map((experience) =>
-    toCardItem(experience, lang, messages),
+  const experiences = (await getPlaceExperiences(place)).map((experience) =>
+    toCardItem(experience, lang, messages, place.name_en),
   );
   const cardLabels = {
     view: messages.common.viewExperience,

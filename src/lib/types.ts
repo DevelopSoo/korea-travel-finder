@@ -1,7 +1,9 @@
 // 경험 한 개. 칸 이름은 Supabase 의 `experiences` 표와 똑같이 쓴다.
 // `_en` 칸은 언어가 늘면 `_es`, `_fr` 칸이 옆에 붙는다.
 
-export type Region = "gangneung" | "seoul";
+// 지역 값은 DB `places.region` 이 정한다 (experiences.region 이 외래 키로 가리킨다).
+// 대시보드에서 지역을 늘려도 코드를 고치지 않도록 고정 목록으로 두지 않는다
+export type Region = string;
 export type Duration = "1-2h" | "half-day" | "full-day";
 export type PriceLevel = "free" | "low" | "mid" | "high";
 export type Score = 1 | 2 | 3 | 4 | 5;

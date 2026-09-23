@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { toCardItem, toPlaceCardItem } from "@/lib/cards";
 import { getPublishedExperiences } from "@/lib/experiences";
-import { getPublishedPlaces } from "@/lib/places";
+import { getPublishedPlaces, getRegionNames } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 import Gallery from "./Gallery";
 
@@ -20,15 +20,20 @@ export default async function UiPage({ params }: PageProps<"/[lang]/dev/ui">) {
   if (!hasLocale(lang)) notFound();
 
   const messages = getMessages(lang);
+  const [experiences, places, regionNames] = await Promise.all([
+    getPublishedExperiences(),
+    getPublishedPlaces(),
+    getRegionNames(),
+  ]);
 
   return (
     <Gallery
       lang={lang}
       messages={messages}
-      cards={getPublishedExperiences().map((experience) =>
-        toCardItem(experience, lang, messages),
+      cards={experiences.map((experience) =>
+        toCardItem(experience, lang, messages, regionNames[experience.region] ?? ""),
       )}
-      places={getPublishedPlaces().map((place) => toPlaceCardItem(place, lang))}
+      places={places.map((place) => toPlaceCardItem(place, lang))}
     />
   );
 }

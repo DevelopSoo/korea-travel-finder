@@ -6,7 +6,7 @@ import CtaBand from "@/components/ui/CtaBand";
 import { Train } from "@/components/ui/icons";
 import { toCardItem } from "@/lib/cards";
 import { getPublishedExperiences } from "@/lib/experiences";
-import { getPlaceOfExperience } from "@/lib/places";
+import { getPublishedPlaces } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 import SavedList, { type SavedItem } from "./SavedList";
 
@@ -24,12 +24,17 @@ export default async function SavedPage({ params }: PageProps<"/[lang]/saved">) 
   const messages = getMessages(lang);
   const t = messages.saved;
 
-  const items: SavedItem[] = getPublishedExperiences().map((experience) => {
-    const place = getPlaceOfExperience(experience);
+  const [experiences, places] = await Promise.all([
+    getPublishedExperiences(),
+    getPublishedPlaces(),
+  ]);
+  const items: SavedItem[] = experiences.map((experience) => {
+    const place = places.find((p) => p.region === experience.region);
+    const regionName = place?.name_en ?? "";
     return {
-      ...toCardItem(experience, lang, messages),
+      ...toCardItem(experience, lang, messages, regionName),
       regionSlug: experience.region,
-      regionName: place?.name_en ?? messages.region[experience.region],
+      regionName,
       placeHref: place ? `/${lang}/places/${place.slug}` : null,
     };
   });
