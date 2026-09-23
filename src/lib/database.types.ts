@@ -25,6 +25,7 @@ export type Database = {
           how_to_get_there_en: string
           id: number
           image_captions: string[]
+          image_credits: Json
           image_urls: string[]
           interest_tags: string[]
           is_published: boolean
@@ -51,6 +52,7 @@ export type Database = {
           how_to_get_there_en: string
           id?: never
           image_captions: string[]
+          image_credits?: Json
           image_urls?: string[]
           interest_tags?: string[]
           is_published?: boolean
@@ -77,6 +79,7 @@ export type Database = {
           how_to_get_there_en?: string
           id?: never
           image_captions?: string[]
+          image_credits?: Json
           image_urls?: string[]
           interest_tags?: string[]
           is_published?: boolean
@@ -107,12 +110,16 @@ export type Database = {
         Row: {
           area_en: string
           card_caption: string
+          card_image_credit: Json | null
+          card_image_url: string | null
           card_tagline_en: string
           created_at: string
           day: Json
           description_en: string
           headline_en: string
           hero_caption: string
+          hero_image_credit: Json | null
+          hero_image_url: string | null
           is_published: boolean
           lead_en: string
           name_en: string
@@ -125,12 +132,16 @@ export type Database = {
         Insert: {
           area_en: string
           card_caption: string
+          card_image_credit?: Json | null
+          card_image_url?: string | null
           card_tagline_en: string
           created_at?: string
           day: Json
           description_en: string
           headline_en: string
           hero_caption: string
+          hero_image_credit?: Json | null
+          hero_image_url?: string | null
           is_published?: boolean
           lead_en: string
           name_en: string
@@ -143,12 +154,16 @@ export type Database = {
         Update: {
           area_en?: string
           card_caption?: string
+          card_image_credit?: Json | null
+          card_image_url?: string | null
           card_tagline_en?: string
           created_at?: string
           day?: Json
           description_en?: string
           headline_en?: string
           hero_caption?: string
+          hero_image_credit?: Json | null
+          hero_image_url?: string | null
           is_published?: boolean
           lead_en?: string
           name_en?: string

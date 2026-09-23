@@ -23,6 +23,7 @@ import Tag from "@/components/ui/Tag";
 import TextField from "@/components/ui/TextField";
 import { Clock, Coins, Sun, Ticket, interestIcons } from "@/components/ui/icons";
 import type { CardItem } from "@/lib/cards";
+import { homePhotos } from "@/lib/homePhotos";
 import { showNotice } from "@/lib/notice";
 import { photoTones } from "@/lib/photoTone";
 import type { Locale, Messages } from "@/messages";
@@ -218,6 +219,24 @@ export default function Gallery({ lang, messages, cards, places }: GalleryProps)
           <PhotoFrame src={null} caption="Gangneung · 06:20" seed="a" ratio="card" />
           <PhotoFrame src={null} caption="Seoul · 19:40" seed="b" ratio="16:9" />
           <PhotoFrame src={null} caption="Jumunjin · 05:40" seed="c" ratio="3:2" />
+        </div>
+        {/* 사진이 있을 때: 출처는 캡션 바로 위 (photos.md §3-6) */}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <PhotoFrame
+            src={homePhotos.hero.src}
+            caption="Anmok Beach, Gangneung · 06:20"
+            credit={homePhotos.hero.credit}
+            creditLabel={messages.photo.credit}
+            captionSide="right"
+            seed="d"
+            ratio="16:9"
+          />
+          <PhotoFrame
+            src={homePhotos.season.src}
+            caption="Sogeumgang Valley, Gangneung · 16:30"
+            seed="e"
+            ratio="16:9"
+          />
         </div>
       </Block>
 

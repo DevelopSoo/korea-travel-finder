@@ -16,8 +16,9 @@ export async function getPublishedExperiences(): Promise<Experience[]> {
     .order("id");
   if (error) throw new Error(`experiences 를 읽지 못했다: ${error.message}`);
 
-  // duration·price_level·점수 칸은 표의 check 제약이 types.ts 의 값만 받는다
-  return data as Experience[];
+  // duration·price_level·점수 칸은 표의 check 제약이 types.ts 의 값만 받는다.
+  // image_credits 는 jsonb — 마이그레이션이 배열만 받는다
+  return data as unknown as Experience[];
 }
 
 export async function getExperience(

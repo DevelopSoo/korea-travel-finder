@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { type PhotoTone, photoGlow, photoTones, toneFor } from "@/lib/photoTone";
+import type { PhotoCredit } from "@/lib/types";
 
 export type PhotoRatio = "card" | "4:5" | "3:2" | "16:9" | "1:1" | "fill";
 
@@ -16,6 +17,10 @@ type PhotoFrameProps = {
   tone?: PhotoTone;
   // 사진 안 캡션 위치. 넓은 사진은 오른쪽 아래
   captionSide?: "left" | "right";
+  // 남이 찍은 사진의 출처. 큰 사진에만 넘긴다 — 카드에는 넣지 않는다 (photos.md §3-6)
+  credit?: PhotoCredit | null;
+  // "Sample photo by {author} on {source}" — messages.photo.credit
+  creditLabel?: string;
   rounded?: "sm" | "md" | "xl" | "none";
   // 사진 위에 얹는 것 (저장 버튼, 제목 등)
   children?: ReactNode;
@@ -49,6 +54,8 @@ export default function PhotoFrame({
   seed,
   tone,
   captionSide = "left",
+  credit,
+  creditLabel,
   rounded = "sm",
   children,
   sizes = "(min-width: 768px) 50vw, 100vw",
@@ -57,7 +64,8 @@ export default function PhotoFrame({
 }: PhotoFrameProps) {
   return (
     <div
-      className={`relative overflow-hidden ${ratioClass[ratio]} ${roundedClass[rounded]} ${className}`}
+      // isolate: 사진을 -z-10 으로 내려도 이 틀 밖으로 빠지지 않게 한다
+      className={`relative isolate overflow-hidden ${ratioClass[ratio]} ${roundedClass[rounded]} ${className}`}
       style={
         src
           ? undefined
@@ -68,15 +76,40 @@ export default function PhotoFrame({
       // 사진이 없을 때도 캡션을 사진 설명으로 읽어 준다
       {...(src ? {} : { role: "img", "aria-label": caption })}
     >
+      {/* 사진은 맨 아래 층에 깐다 — 위에 얹는 글(children)이 absolute 가 아니어도 사진에 가리지 않게 */}
       {src && (
-        <Image
-          src={src}
-          alt={caption}
-          fill
-          sizes={sizes}
-          preload={preload}
-          className="object-cover"
-        />
+        <div className="absolute inset-0 -z-10">
+          <Image
+            src={src}
+            alt={caption}
+            fill
+            sizes={sizes}
+            preload={preload}
+            className="object-cover"
+          />
+        </div>
+      )}
+      {/* 출처는 캡션 바로 위, 같은 쪽에 둔다 — 좁은 화면에서 캡션과 겹치지 않게 */}
+      {src && credit && creditLabel && (
+        <p
+          className={`absolute bottom-[22px] z-10 text-[10px] leading-none tracking-[0.04em] text-on-photo-soft ${
+            captionSide === "right" ? "right-3" : "left-3"
+          }`}
+        >
+          {creditLabel.split(/(\{author\}|\{source\})/).map((part) =>
+            part === "{author}" ? (
+              <CreditLink key={part} href={credit.author_url}>
+                {credit.author}
+              </CreditLink>
+            ) : part === "{source}" ? (
+              <CreditLink key={part} href={credit.source_url}>
+                {credit.source}
+              </CreditLink>
+            ) : (
+              part
+            ),
+          )}
+        </p>
       )}
       {/* alt 가 같은 문장을 읽어 주므로 화면 읽기에서는 뺀다 */}
       <p
@@ -89,5 +122,18 @@ export default function PhotoFrame({
       </p>
       {children}
     </div>
+  );
+}
+
+function CreditLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="underline underline-offset-2 hover:text-on-photo"
+    >
+      {children}
+    </a>
   );
 }

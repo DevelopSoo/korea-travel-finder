@@ -76,8 +76,10 @@ export default async function PlacePage({
 
       {/* 첫 사진 — 이름과 한 줄이 사진 위 왼쪽 아래에 앉는다 */}
       <PhotoFrame
-        src={null}
+        src={place.hero_image_url}
         caption={place.hero_caption}
+        credit={place.hero_image_credit}
+        creditLabel={messages.photo.credit}
         seed={place.slug}
         tone="sea"
         ratio="fill"
@@ -145,8 +147,10 @@ export default async function PlacePage({
       <section className="mx-auto max-w-content pt-11 gutter">
         <div className="grid gap-11 rounded-xl bg-paper-2 p-7 md:grid-cols-2">
           <PhotoFrame
-            src={null}
+            src={place.card_image_url}
             caption={place.card_caption}
+            credit={place.card_image_credit}
+            creditLabel={messages.photo.credit}
             seed={`${place.slug}-day`}
             ratio="fill"
             rounded="md"

@@ -12,17 +12,19 @@ export async function getPublishedPlaces(): Promise<Place[]> {
   const { data, error } = await createPublicClient()
     .from("places")
     .select(
-      "slug, region, name_en, area_en, tagline_en, headline_en, lead_en, description_en, card_tagline_en, hero_caption, card_caption, plan, day, is_published",
+      "slug, region, name_en, area_en, tagline_en, headline_en, lead_en, description_en, card_tagline_en, hero_caption, card_caption, hero_image_url, hero_image_credit, card_image_url, card_image_credit, plan, day, is_published",
     )
     .eq("is_published", true)
     .order("region");
   if (error) throw new Error(`places 를 읽지 못했다: ${error.message}`);
 
-  // plan·day 는 jsonb — 표의 check 제약이 3개짜리 배열만 받는다
+  // plan·day 는 jsonb — 표의 check 제약이 3개짜리 배열만 받는다. 사진 출처도 jsonb
   return data.map((row) => ({
     ...row,
     plan: row.plan as Place["plan"],
     day: row.day as Place["day"],
+    hero_image_credit: row.hero_image_credit as Place["hero_image_credit"],
+    card_image_credit: row.card_image_credit as Place["card_image_credit"],
   }));
 }
 

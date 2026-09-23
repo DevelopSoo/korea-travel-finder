@@ -37,6 +37,8 @@
 - `src` 가 없으면 자리 표시 그라데이션이 깔린다 (photos.md §3-5). 이때 `role="img"` + `aria-label` 로 캡션을 읽어 준다.
 - 사진 위에 얹을 것(저장 단추, 제목)은 `children` 으로 넣는다.
 - **반투명 막을 씌우지 않는다.** 글자가 안 읽히면 사진을 바꾼다.
+- `credit` + `creditLabel` 을 넘기면 캡션 바로 위에 출처 한 줄이 붙는다 (photos.md §3-6). 작가 이름과 출처 이름이 링크다. 큰 사진에만 넘긴다.
+- 사진은 틀 안 맨 아래 층(`-z-10`, 틀은 `isolate`)에 깔린다. 그래서 `children` 이 `absolute` 가 아니어도 사진에 가리지 않는다.
 
 ### 4-2. Eyebrow · SectionHeading
 
