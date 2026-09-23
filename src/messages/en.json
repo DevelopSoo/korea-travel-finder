@@ -5,7 +5,9 @@
   "nav": {
     "places": "Places",
     "experiences": "Experiences",
-    "saved": "Saved"
+    "saved": "Saved",
+    "login": "Log in",
+    "logout": "Log out"
   },
   "footer": {
     "privacy": "Privacy",
@@ -18,6 +20,34 @@
     "share": "Share",
     "viewExperience": "View experience",
     "back": "Back"
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "submit": "Log in",
+      "switchPrompt": "New here?",
+      "switchAction": "Create an account"
+    },
+    "signup": {
+      "title": "Create an account",
+      "submit": "Create account",
+      "switchPrompt": "Already have an account?",
+      "switchAction": "Log in"
+    },
+    "lead": "An account is optional. You can explore and save experiences without one.",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "errors": {
+      "missing": "Enter your email and password.",
+      "invalidEmail": "That email address doesn't look right.",
+      "shortPassword": "Your password needs at least 8 characters.",
+      "weakPassword": "Choose a longer or less common password.",
+      "wrongCredentials": "That email and password don't match. Check them and try again.",
+      "emailTaken": "There's already an account with this email. Log in instead.",
+      "tooMany": "Too many attempts. Wait a few minutes and try again.",
+      "generic": "Something went wrong on our side. Please try again."
+    }
   },
   "home": {
     "hero": {
