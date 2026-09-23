@@ -313,6 +313,25 @@ erDiagram
 - 테스트 계정 1개는 확인 후 SQL로 지웠다. 저장 행 6개도 cascade로 함께 지워졌다 (지금 `auth.users` 0명, `saved_experiences` 0행, 세션 0).
 - advisors: 보안 경고 없음. 성능 INFO 2건(`saved_experiences_experience_id_idx`, `experiences_region_idx` 미사용)은 이전과 같아서 그대로 둔다.
 
+### 임시 사진 — Unsplash
+
+**목표:** 자리 표시 그라데이션을 Unsplash 사진으로 채운다. 사진 파일은 `public/`에 두지 않고, URL을 DB 칸에 둔다. 규칙은 `docs/design-system/photos.md` §3-6에 있다.
+
+**진행 기록 (2026-09-23, 브랜치 `feat/unsplash-photos`)**
+- 칸 추가 마이그레이션 `20260923084227_add_photo_urls_and_credits.sql`:
+  - `experiences.image_credits` (jsonb 배열, `image_urls`와 같은 순서)
+  - `places.hero_image_url`·`hero_image_credit`·`card_image_url`·`card_image_credit`
+  - 출처 모양: `{author, author_url, source, source_url}`
+  - 권한은 표 단위 `select`라 따로 주지 않았다. 칸만 추가했으므로 배포된 사이트는 영향을 받지 않는다.
+- 사진 16장:
+  - 경험 10, 지역 4 (강릉·서울의 큰 사진과 카드), 첫 화면 2 (`src/lib/homePhotos.ts`)
+  - Unsplash 공식 API(Demo 키, `.env.local`의 `UNSPLASH_ACCESS_KEY`, 저장소에 넣지 않음)로 찾았다. 후보는 작게 받아서 직접 보고 골랐다.
+  - 장소명으로 검색되는 사진을 먼저 썼다 (안목해변·강릉·을지로·인왕산 성곽·북촌). 없으면 한국의 비슷한 장면으로 채웠다.
+  - 그래서 캡션의 장소와 다를 수 있다. 큰 사진에는 "Sample photo by … on Unsplash" 출처를 붙였다 (인수인계 §13-8).
+- 이미지 로더: `next.config.ts` → `images.loaderFile = src/lib/imageLoader.ts`. Unsplash 주소에는 `w`·`q`·`auto=format`을 붙여 Unsplash 서버에서 바로 받는다. Unsplash가 요구하는 hotlink 방식이고, Vercel 이미지 변환 사용량이 들지 않는다.
+- `PhotoFrame` 고침: 사진이 있으면 사진이 위에 얹은 글(첫 화면·지역 상세 제목과 버튼)을 가렸다. 사진이 없던 동안에는 드러나지 않던 문제다. 사진을 틀 안 맨 아래 층(`-z-10`, 틀은 `isolate`)으로 내렸다.
+- **적용 순서 (지키지 않으면 배포 사이트의 사진이 깨진다):** DB는 로컬과 배포가 같이 쓴다. 지금 배포된 코드는 Unsplash 주소를 처리하지 못한다. 그래서 ① 이 PR을 머지해 배포 → ② 사진 데이터 마이그레이션 적용 → ③ `/api/revalidate` 호출(또는 최대 1시간 대기) 순서로 한다.
+
 ## 6. 이메일 인증을 끈 상태의 위험과 대응
 
 | 위험 | 영향 | 지금의 대응 |

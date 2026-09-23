@@ -49,7 +49,7 @@ export function toPlaceCardItem(place: Place, lang: string): CardItem {
     title: place.name_en,
     blurb: place.card_tagline_en,
     caption: place.card_caption,
-    src: null,
+    src: place.card_image_url,
     category: place.area_en,
     region: place.name_en,
   };

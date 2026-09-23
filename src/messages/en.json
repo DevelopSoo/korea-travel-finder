@@ -225,5 +225,8 @@
     "removed": "Removed from your saved list.",
     "retry": "Try again",
     "undo": "Undo"
+  },
+  "photo": {
+    "credit": "Sample photo by {author} on {source}"
   }
 }

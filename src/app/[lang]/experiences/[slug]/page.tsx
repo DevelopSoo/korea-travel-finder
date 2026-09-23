@@ -134,6 +134,8 @@ export default async function ExperiencePage({
         <PhotoFrame
           src={experience.image_urls[0] ?? null}
           caption={experience.image_captions[0]}
+          credit={experience.image_credits[0]}
+          creditLabel={messages.photo.credit}
           seed={experience.slug}
           ratio="fill"
           rounded="md"
@@ -180,6 +182,8 @@ export default async function ExperiencePage({
                     key={src}
                     src={src}
                     caption={experience.image_captions[i + 1] ?? experience.image_captions[0]}
+                    credit={experience.image_credits[i + 1]}
+                    creditLabel={messages.photo.credit}
                     seed={`${experience.slug}-${i}`}
                     ratio="3:2"
                     sizes="(min-width: 768px) 30vw, 50vw"

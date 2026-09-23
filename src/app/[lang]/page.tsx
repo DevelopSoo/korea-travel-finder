@@ -8,6 +8,7 @@ import PlaceCard from "@/components/ui/PlaceCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { interestIcons } from "@/components/ui/icons";
 import { toPlaceCardItem } from "@/lib/cards";
+import { homePhotos } from "@/lib/homePhotos";
 import { getPublishedPlaces } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 
@@ -29,8 +30,10 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       {/* 첫 화면 사진 — 화면 끝까지 닿는다. 글자는 사진 위 왼쪽 아래 */}
       <section className="relative">
         <PhotoFrame
-          src={null}
+          src={homePhotos.hero.src}
           caption={t.hero.caption}
+          credit={homePhotos.hero.credit}
+          creditLabel={messages.photo.credit}
           seed="home-hero"
           tone="pine"
           ratio="fill"
@@ -93,8 +96,10 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       {/* 시즌 밴드 — 사진 반, 글 반 */}
       <section className="mt-14 grid bg-paper-2 md:grid-cols-2">
         <PhotoFrame
-          src={null}
+          src={homePhotos.season.src}
           caption={t.season.caption}
+          credit={homePhotos.season.credit}
+          creditLabel={messages.photo.credit}
           seed="home-season"
           tone="dusk"
           ratio="fill"

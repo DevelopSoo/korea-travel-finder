@@ -8,6 +8,14 @@ export type Duration = "1-2h" | "half-day" | "full-day";
 export type PriceLevel = "free" | "low" | "mid" | "high";
 export type Score = 1 | 2 | 3 | 4 | 5;
 
+// 남이 찍은 사진의 출처. 화면에 "Sample photo by {author} on {source}" 로 보인다 (photos.md §3-6)
+export type PhotoCredit = {
+  author: string;
+  author_url: string;
+  source: string;
+  source_url: string;
+};
+
 export type Experience = {
   id: number;
   slug: string;
@@ -30,6 +38,8 @@ export type Experience = {
   image_urls: string[];
   // image_urls 와 같은 순서의 "장소 · 시간" 캡션. 비워 두지 않는다 (photos.md §3-1)
   image_captions: [string, ...string[]];
+  // image_urls 와 같은 순서의 사진 출처. 직접 찍은 사진이면 비워 둔다 (photos.md §3-6)
+  image_credits: PhotoCredit[];
   shorts_url: string | null;
   related_slugs: string[];
   is_published: boolean;
@@ -58,6 +68,12 @@ export type Place = {
   // 사진 캡션 = alt 텍스트 (photos.md §3-1)
   hero_caption: string;
   card_caption: string;
+  // 사진이 아직 없으면 null → 자리 표시 그라데이션 (photos.md §3-5)
+  hero_image_url: string | null;
+  hero_image_credit: PhotoCredit | null;
+  // 첫 화면 장소 카드와 지역 상세 "하루 흐름" 사진
+  card_image_url: string | null;
+  card_image_credit: PhotoCredit | null;
   // "Plan your visit" 상자 — 3개
   plan: { title_en: string; desc_en: string }[];
   // "Make a day of it" 하루 흐름 — 3개
