@@ -20,6 +20,7 @@ import SaveButton from "@/components/ui/SaveButton";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Select from "@/components/ui/Select";
 import Tag from "@/components/ui/Tag";
+import TextField from "@/components/ui/TextField";
 import { Clock, Coins, Sun, Ticket, interestIcons } from "@/components/ui/icons";
 import type { CardItem } from "@/lib/cards";
 import { photoTones } from "@/lib/photoTone";
@@ -169,6 +170,19 @@ export default function Gallery({ lang, messages, cards, places }: GalleryProps)
           <Tag>slow</Tag>
           <Tag>local style</Tag>
           <Tag>sea</Tag>
+        </div>
+      </Block>
+
+      <Block title="Text field">
+        <div className="grid max-w-[27rem] gap-5">
+          <TextField label="Email" name="demo-email" type="email" />
+          <TextField
+            label="Password"
+            name="demo-password"
+            type="password"
+            hint="At least 8 characters."
+            invalid
+          />
         </div>
       </Block>
 
