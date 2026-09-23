@@ -23,10 +23,12 @@ function categoryOf(experience: Experience, messages: Messages): string {
   return (first && labels[first as keyof typeof labels]) ?? "";
 }
 
+// regionName 은 places.name_en — 부르는 쪽에서 getRegionNames() 로 찾아 넘긴다
 export function toCardItem(
   experience: Experience,
   lang: string,
   messages: Messages,
+  regionName: string,
 ): CardItem {
   return {
     slug: experience.slug,
@@ -36,7 +38,7 @@ export function toCardItem(
     caption: experience.image_captions[0],
     src: experience.image_urls[0] ?? null,
     category: categoryOf(experience, messages),
-    region: messages.region[experience.region],
+    region: regionName,
   };
 }
 

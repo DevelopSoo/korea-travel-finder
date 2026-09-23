@@ -18,21 +18,20 @@ import {
   getPublishedExperiences,
   getRelatedExperiences,
 } from "@/lib/experiences";
-import { getPlaceOfExperience } from "@/lib/places";
+import { getPlaceOfExperience, getRegionNames } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 import type { Score } from "@/lib/types";
 
-export function generateStaticParams() {
-  return getPublishedExperiences().map((experience) => ({
-    slug: experience.slug,
-  }));
+export async function generateStaticParams() {
+  const experiences = await getPublishedExperiences();
+  return experiences.map((experience) => ({ slug: experience.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[lang]/experiences/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const experience = getExperience(slug);
+  const experience = await getExperience(slug);
   if (!experience) return {};
   return { title: experience.name_en, description: experience.tagline_en };
 }
@@ -51,16 +50,22 @@ export default async function ExperiencePage({
   const { lang, slug } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const experience = getExperience(slug);
+  const experience = await getExperience(slug);
   if (!experience) notFound();
 
   const messages = getMessages(lang);
   const t = messages.detail;
-  const place = getPlaceOfExperience(experience);
-  const placeName = place?.name_en ?? messages.region[experience.region];
-  const related = getRelatedExperiences(experience).map((item) =>
-    toCardItem(item, lang, messages),
+  const place = await getPlaceOfExperience(experience);
+  // 지역이 비공개면 이름이 없다 — 빈 칸으로 두고 눈썹 글자에서 뺀다
+  const placeName = place?.name_en ?? "";
+  const regionNames = await getRegionNames();
+  const related = (await getRelatedExperiences(experience)).map((item) =>
+    toCardItem(item, lang, messages, regionNames[item.region] ?? ""),
   );
+  const interestLabel =
+    messages.results.summary.interest[
+      experience.interest_tags[0] as keyof typeof messages.results.summary.interest
+    ] ?? "";
   const tags = [
     ...new Set([...experience.interest_tags, ...experience.style_tags]),
   ];
@@ -113,9 +118,7 @@ export default async function ExperiencePage({
 
       <article className="mx-auto max-w-content pt-5 gutter">
         <Eyebrow tone="accent" className="tracking-[0.16em]">
-          {placeName} · {messages.results.summary.interest[
-            experience.interest_tags[0] as keyof typeof messages.results.summary.interest
-          ] ?? ""}
+          {[placeName, interestLabel].filter(Boolean).join(" · ")}
         </Eyebrow>
         <h1 className="mt-3.5 text-display md:text-[56px]">
           {experience.name_en}

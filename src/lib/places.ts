@@ -1,28 +1,52 @@
-import { places } from "@/data/places.sample";
+import { cacheLife, cacheTag } from "next/cache";
 import { getPublishedExperiences } from "./experiences";
+import { createPublicClient } from "./supabase/public";
 import type { Experience, Place } from "./types";
 
-// 지금은 샘플 파일에서 읽는다. Supabase 가 붙으면 이 파일만 바꾼다
-export function getPublishedPlaces(): Place[] {
-  return places.filter((place) => place.is_published);
+// Supabase `places` 표에서 읽는다. 1시간마다, 또는 /api/revalidate 가 불리면 새로 읽는다
+export async function getPublishedPlaces(): Promise<Place[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("places");
+
+  const { data, error } = await createPublicClient()
+    .from("places")
+    .select(
+      "slug, region, name_en, area_en, tagline_en, headline_en, lead_en, description_en, card_tagline_en, hero_caption, card_caption, plan, day, is_published",
+    )
+    .eq("is_published", true)
+    .order("region");
+  if (error) throw new Error(`places 를 읽지 못했다: ${error.message}`);
+
+  // plan·day 는 jsonb — 표의 check 제약이 3개짜리 배열만 받는다
+  return data.map((row) => ({
+    ...row,
+    plan: row.plan as Place["plan"],
+    day: row.day as Place["day"],
+  }));
 }
 
-export function getPlace(slug: string): Place | undefined {
-  return getPublishedPlaces().find((place) => place.slug === slug);
+export async function getPlace(slug: string): Promise<Place | undefined> {
+  const places = await getPublishedPlaces();
+  return places.find((place) => place.slug === slug);
 }
 
 // 그 지역의 경험 목록
-export function getPlaceExperiences(place: Place): Experience[] {
-  return getPublishedExperiences().filter(
-    (experience) => experience.region === place.region,
-  );
+export async function getPlaceExperiences(place: Place): Promise<Experience[]> {
+  const experiences = await getPublishedExperiences();
+  return experiences.filter((experience) => experience.region === place.region);
 }
 
 // 경험이 속한 장소 — breadcrumb 과 "지역 안내 보기" 링크에 쓴다
-export function getPlaceOfExperience(
+export async function getPlaceOfExperience(
   experience: Experience,
-): Place | undefined {
-  return getPublishedPlaces().find(
-    (place) => place.region === experience.region,
-  );
+): Promise<Place | undefined> {
+  const places = await getPublishedPlaces();
+  return places.find((place) => place.region === experience.region);
+}
+
+// region → 지역 이름. 카드 눈썹 글자에 쓴다. 지역 이름은 places.name_en 한 곳에만 둔다
+export async function getRegionNames(): Promise<Record<string, string>> {
+  const places = await getPublishedPlaces();
+  return Object.fromEntries(places.map((place) => [place.region, place.name_en]));
 }

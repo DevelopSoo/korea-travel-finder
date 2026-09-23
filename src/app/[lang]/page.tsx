@@ -20,7 +20,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
 
   const messages = getMessages(lang);
   const t = messages.home;
-  const places = getPublishedPlaces().map((place) =>
+  const places = (await getPublishedPlaces()).map((place) =>
     toPlaceCardItem(place, lang),
   );
 
