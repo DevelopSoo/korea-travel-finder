@@ -14,7 +14,7 @@
 | 로그인 방식 | **이메일 + 비밀번호 한 가지.** 소셜 로그인·매직링크는 넣지 않는다. |
 | 이메일 인증 | **Supabase에서 끈다** (Authentication → Sign In / Providers → Email → *Confirm email* 끔). 가입 즉시 로그인된다. |
 | 저장 단위 | 기존대로 **경험만** 저장한다. 지역 저장은 넣지 않는다. |
-| 콘텐츠 반영 시점 | **1시간마다 자동 반영 + 즉시 반영.** Supabase에서 경험·지역을 고치면 Database Webhook이 사이트의 캐시 비우기 주소를 불러 바로 반영된다. 웹훅이 실패해도 최대 1시간 뒤에는 반영된다. |
+| 콘텐츠 반영 시점 | **1시간마다 자동 반영 + 즉시 반영.** Supabase에서 경험·지역을 고치면 Database Webhook이 사이트의 캐시 비우기 주소를 불러 바로 반영된다. 웹훅이 실패해도 최대 1시간 뒤에는 반영된다. **첫 배포에서는 웹훅을 보류했다** — 최대 1시간 뒤 자동 반영, 급할 때는 직접 부른다 (§5 배포 진행 기록). |
 | 비밀번호 재설정 | **나중에.** 이메일 인증을 켤 때 함께 넣는다 (§6). |
 | 범위 밖 유지 | Stories, 후기, AI 일정, 예약·결제, 자동 개인화는 이번 작업에 넣지 않는다. |
 
@@ -276,6 +276,42 @@ erDiagram
 - advisors 최종: 보안 경고 없음. 2단계의 Leaked Password Protection 경고도 더 이상 나오지 않는다. 성능 INFO 2건(`saved_experiences_experience_id_idx`, `experiences_region_idx` 미사용)은 데이터가 적어서 생긴 것이라 그대로 둔다.
 - 이번 범위 밖이라 고치지 않은 것: 필터 결과가 0개일 때 인수인계 §6.2의 "필터 초기화" 버튼이 없다 (안내 문구와 저장 목록 링크만 있다). `docs/design-system/index.md` §0-2의 "장소·경험 데이터: 샘플이다 (`src/data/*.sample.ts`)"는 1단계 이후 사실과 다르다. 콘텐츠·사진이 검증 전 샘플이라는 점(§13-8)은 콘텐츠 조사 단계의 일이다.
 - **배포 전에 대시보드에서 직접 할 일:** (1) 배포 환경변수 `REVALIDATE_SECRET` (없으면 `/api/revalidate`가 500), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. (2) Supabase Database Webhook: `experiences`, `places`의 insert·update·delete → `POST https://<배포 주소>/api/revalidate`, 헤더 `x-revalidate-secret`. 지금은 설정되어 있지 않다 (public 표 트리거는 `set_updated_at`뿐). (3) 로그인 기능은 이 4단계와 함께 배포한다. (지금은 메일을 보내는 기능이 없어 Authentication → URL Configuration의 Site URL은 쓰이지 않는다. 비밀번호 재설정·이메일 인증을 넣을 때 배포 주소로 맞춘다.)
+
+### 배포 — Vercel
+
+**배포 진행 기록 (2026-09-23, 브랜치 `docs/deploy-check`)**
+- 프로젝트: Vercel `developsoos-projects/korea-travel-finder`. GitHub `DevelopSoo/korea-travel-finder`와 연결되어 있고, main에 머지하면 production으로 배포된다. 주소는 **https://korea-travel-finder.vercel.app** 이다. 확인한 배포는 `dpl_5dgS76uLVLWsR5YiUyhARxQyMSc1`(main `92fc6e9` = PR #14 머지, 리전 iad1)다.
+- 환경변수 (값은 적지 않는다. production·preview 둘 다, 모두 sensitive): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `REVALIDATE_SECRET`. `REVALIDATE_SECRET`을 새 값으로 바꾼 시각(08:11:36 UTC)보다 뒤인 08:12:13 UTC에 다시 배포되어, 새 값이 적용된 상태다. **환경변수를 바꾸면 다시 배포해야 적용된다.** `NEXT_PUBLIC_` 값은 빌드할 때 코드에 들어가기 때문이다. Vercel → Deployments → 최신 production → Redeploy로 다시 배포한다.
+- 빌드 결과는 로컬 `pnpm build`와 같다. 정적(○): `/en`, `/en/places`, `/en/places/gangneung`·`seoul`, `/en/saved`, `/en/privacy`, `/en/dev/ui`, 경험 상세 일부. 부분 사전 렌더(◐): `/en/experiences`(`?i=`), `/en/login`, 나머지 경험 상세. 요청마다 새로 그리는 것(ƒ)은 `/api/revalidate`와 Proxy뿐이다.
+- **Database Webhook은 보류했다.** 콘텐츠를 고칠 사람도, 고치는 일도 아직 적어서 최대 1시간 늦어도 문제가 없다. 웹훅을 걸면 대시보드에 비밀 값을 하나 더 두어야 하고, 실패해도 알려 주는 곳이 없다. 편집이 잦아지면 1단계 진행 기록의 값(`POST …/api/revalidate`, 헤더 `x-revalidate-secret`)으로 설정한다.
+- **콘텐츠 반영:** 대시보드에서 `experiences`·`places`를 고치면 `cacheLife("hours")`에 따라 **최대 1시간 뒤** 사이트에 반영된다. 급할 때는 비밀 값을 넣어 직접 부른다. 비밀 값은 명령에 직접 적지 말고 입력받는다 (터미널 기록에 남지 않게):
+  ```bash
+  read -rs "S?REVALIDATE_SECRET: " && echo   # bash는 read -rsp "REVALIDATE_SECRET: " S
+  curl -i -X POST https://korea-travel-finder.vercel.app/api/revalidate -H "x-revalidate-secret: $S"
+  unset S
+  ```
+  `200 {"ok":true}`이 오면 캐시가 비워진 것이다. `'max'` 방식이라 바로 다음 요청에는 이전 내용이 나오고, 새로고침 한두 번 안에 바뀐다. `401`이 오면 비밀 값이 틀린 것이다. `500`이 오면 배포 환경변수에 `REVALIDATE_SECRET`이 없는 것이다.
+- 배포 주소에서 확인한 것 (새 브라우저 컨텍스트, https):
+  - `/api/revalidate`: 헤더 없이 POST → 401, 틀린 헤더 → 401, GET → 405. 500이 아니므로 `REVALIDATE_SECRET`이 들어가 있다.
+  - 비로그인:
+    - 첫 화면 Food 칩 → `?i=food`, 칩 선택, 4개. 들어온 직후 잠깐은 전체 목록이 보인다 (1단계의 `<Suspense>` 대기 화면. 로컬과 같다).
+    - 목록·서울 지역 상세·경험 상세에서 저장 → 머리 숫자와 책갈피(`aria-pressed`)가 일치한다.
+    - 상세 → 뒤로 가도 `?i=food`와 칩이 유지된다.
+    - 저장 페이지: 기기 문구와 `Log in to see it on other devices`(`?next=%2Fen%2Fsaved`) 링크가 있다. View experience·View region guide가 연결된다. Remove → 알림 + Undo → 새로고침해도 유지된다.
+    - 경험 10개 모두 외부 링크는 Google 지도뿐이다.
+    - 개인정보 문구와 `mailto:mondaylabs0132@gmail.com` 링크가 4단계 내용과 같다.
+  - 로그인:
+    - 저장 페이지 로그인 링크 → 가입 → `/en/saved`로 돌아온다. 비로그인으로 저장한 3개가 계정에 합쳐지고, 기기 목록은 비워지고, 안내가 계정 문구로 바뀐다.
+    - 새로고침해도 로그인이 유지된다.
+    - 목록·강릉 지역 상세·경험 상세에서 저장하면 6개로 일치한다.
+    - Supabase 요청을 막고 저장하면 숫자가 그대로이고 "Couldn't save that…" 알림이 뜬다.
+    - 다른 브라우저 컨텍스트로 로그인하면 같은 6개가 보인다. 이미 계정에 있는 경험을 기기에 저장해 둔 채 로그인해도 중복이 생기지 않는다.
+    - 로그아웃하면 보던 페이지에 그대로 머물고, 빈 기기 목록과 기기 문구가 보인다. 로그인 쿠키도 사라진다.
+  - 폭 320px에서는 메인·목록·경험 상세·지역 목록·지역 상세·저장(비로그인·로그인)·개인정보·가입 화면 모두 가로 스크롤이 없다.
+  - 배포의 production 로그에 오류가 없다 (확인한 시점에서 지난 1시간).
+- 로컬과 다르게 동작한 곳은 없다. 참고로 로그인 쿠키(`sb-…-auth-token`)에는 https에서도 `Secure` 표시가 없다 (`SameSite=Lax`, 400일). `@supabase/ssr`의 기본값이라 로컬도 같고, 브라우저에서 로그인 상태를 읽어야 하므로 `HttpOnly`도 아니다.
+- 테스트 계정 1개는 확인 후 SQL로 지웠다. 저장 행 6개도 cascade로 함께 지워졌다 (지금 `auth.users` 0명, `saved_experiences` 0행, 세션 0).
+- advisors: 보안 경고 없음. 성능 INFO 2건(`saved_experiences_experience_id_idx`, `experiences_region_idx` 미사용)은 이전과 같아서 그대로 둔다.
 
 ## 6. 이메일 인증을 끈 상태의 위험과 대응
 
