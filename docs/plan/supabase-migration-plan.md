@@ -32,7 +32,7 @@
 | Supabase 연결 | 브라우저·서버 클라이언트와 세션 갱신(`proxy.ts`)까지 설정됨, 실제 사용처는 없음 | `src/lib/supabase/*`, `src/proxy.ts` |
 | Supabase DB | `public` 스키마에 표 없음 | — |
 | 페이지 생성 방식 | 경험·지역 상세가 `generateStaticParams`로 미리 만들어짐 | `experiences/[slug]/page.tsx`, `places/[slug]/page.tsx` |
-| 안내 문구 | “계정을 요구하지 않고 이메일도 모으지 않는다”, “이 기기에 저장” | `src/messages/en.json` (`privacy`, `saved.device`) |
+| 안내 문구 | “계정을 요구하지 않고 이메일도 모으지 않는다”, “이 기기에 저장” (4단계에서 고침) | `src/messages/en.json` (`privacy`, `saved.device`) |
 
 **좋은 점:** 콘텐츠 읽기는 `experiences.ts`·`places.ts` 두 파일에만 있고, 저장은 `useSaved()` 하나로만 쓰인다. 그래서 이 세 파일의 **안쪽만 바꾸면** 화면 부품은 거의 건드리지 않아도 된다.
 
@@ -263,6 +263,20 @@ erDiagram
 | 인수인계 §13 시나리오 전체 재확인 (로그인·비로그인 양쪽) | — |
 | Supabase advisors 최종 점검 | — |
 
+**진행 기록 (2026-09-23, 브랜치 `feat/privacy-copy-finish`)**
+- §7 결정: 계정 삭제는 **문의로 처리**한다. 연락처는 `mondaylabs0132@gmail.com`이고, 개인정보 페이지 맨 아래에 `mailto` 링크로 적었다. 요청이 오면 Supabase 대시보드(Authentication → Users)에서 지운다. 저장 목록은 cascade로 함께 지워진다. 비밀번호를 잊은 경우도 같은 주소로 받는다 (§6).
+- 개인정보 문구(`en.json` → `privacy`): 계정 없이 쓰면 이 브라우저에만 남는다는 것, 계정은 선택이고 만들면 이메일과 저장 목록을 보관한다는 것(이름은 묻지 않고, 비밀번호는 읽을 수 없는 형태로 저장)을 적었다. 로그인하면 이 기기 목록을 계정에 합친 뒤 비우고, 로그아웃하면 계정 목록이 이 기기에 남지 않으며, 로그인 유지에 쿠키를 쓴다는 것도 넣었다. 저장 위치가 Supabase라는 것, 비밀번호 재설정 기능이 없어 문의로 처리한다는 것, 계정 삭제 방법과 저장 목록이 함께 지워진다는 것도 적었다. 예전 문구의 "발 링크로 연락하라"는 발에 연락 수단이 없어 사실과 달랐다. 이번에 연락처로 바꿨다.
+- 저장 페이지 안내: `saved.device`를 `guest`/`login`/`account` 세 문구로 나눴다. 새 클라이언트 부품 `src/app/[lang]/saved/SavedNote.tsx`가 `useAuth()`로 고른다. 비로그인이면 "Saved on this device…" 아래에 `Log in to see it on other devices` 링크(`ArrowLink` accent, `?next=` 현재 주소)를 보여 주고, 로그인이면 "Saved to your account…"를 보여 준다. 확인하는 동안에는 한 줄 높이만 잡아 두고 글은 비운다. 서버는 쿠키를 읽지 않으므로 `/en/saved`, `/en/privacy`는 계속 정적(○)으로 미리 만들어진다 (빌드 결과 확인).
+- `structure.md`: 페이지 목록 7번 설명과 [6] 저장 조립도를 고치고, §1-2 "계정도 없다"를 "저장은 이 기기 또는 계정에 남는다"로 다시 썼다.
+- 인수인계 §13 재확인 (로컬 `pnpm build && pnpm start`, 새 브라우저 컨텍스트):
+  - 비로그인: 1) 첫 화면 Food 칩 → `?i=food`, 칩 선택됨, 4개. 2) 목록·서울 지역 상세·경험 상세에서 저장 → 머리 숫자·책갈피·저장 페이지 일치. 3) 상세 직접 진입 시 지역 안내·방문 안내 있음. 4) 상세 → 뒤로 가도 `?i=food`와 칩 유지. 5) 저장 페이지 View experience·View region guide 연결. 6) Remove → 알림 + Undo → 복구 → 새로고침 유지, 필터 결과 0개 안내. 7) 경험 10개 모두 외부 링크는 Google 지도뿐이고 예약 링크나 빈 링크(`#`)는 없다. 8) 사진 자리에는 "Photo —" 자리 표시가 보인다.
+  - 로그인: 비로그인으로 2개 저장 → 저장 페이지 로그인 링크 → 가입 → `/en/saved`로 복귀, 안내가 계정 문구로 바뀌고 로그인 링크는 사라짐, 2개 합쳐지고 기기 목록 비워짐. 목록·강릉 지역 상세·경험 상세에서 저장 → 5개 일치. Supabase 요청을 막고 저장 → 되돌림 + 실패 알림. 다른 브라우저로 로그인하면 같은 5개. 로그아웃하면 빈 기기 목록 + 기기 문구. Remove → Undo → 전부 해제 → 새로고침 후 빈 상태.
+  - 폭 320px: 저장(비로그인·로그인), 개인정보 페이지에서 가로 스크롤 없음.
+- 테스트 계정 1개는 확인 후 SQL로 지웠다. 지우기 전에 저장 행을 하나 넣어 두었고, cascade로 함께 지워지는 것을 확인했다 (지금 `auth.users` 0명, `saved_experiences` 0행).
+- advisors 최종: 보안 경고 없음. 2단계의 Leaked Password Protection 경고도 더 이상 나오지 않는다. 성능 INFO 2건(`saved_experiences_experience_id_idx`, `experiences_region_idx` 미사용)은 데이터가 적어서 생긴 것이라 그대로 둔다.
+- 이번 범위 밖이라 고치지 않은 것: 필터 결과가 0개일 때 인수인계 §6.2의 "필터 초기화" 버튼이 없다 (안내 문구와 저장 목록 링크만 있다). `docs/design-system/index.md` §0-2의 "장소·경험 데이터: 샘플이다 (`src/data/*.sample.ts`)"는 1단계 이후 사실과 다르다. 콘텐츠·사진이 검증 전 샘플이라는 점(§13-8)은 콘텐츠 조사 단계의 일이다.
+- **배포 전에 대시보드에서 직접 할 일:** (1) 배포 환경변수 `REVALIDATE_SECRET` (없으면 `/api/revalidate`가 500), `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. (2) Supabase Database Webhook: `experiences`, `places`의 insert·update·delete → `POST https://<배포 주소>/api/revalidate`, 헤더 `x-revalidate-secret`. 지금은 설정되어 있지 않다 (public 표 트리거는 `set_updated_at`뿐). (3) 로그인 기능은 이 4단계와 함께 배포한다. (지금은 메일을 보내는 기능이 없어 Authentication → URL Configuration의 Site URL은 쓰이지 않는다. 비밀번호 재설정·이메일 인증을 넣을 때 배포 주소로 맞춘다.)
+
 ## 6. 이메일 인증을 끈 상태의 위험과 대응
 
 | 위험 | 영향 | 지금의 대응 |
@@ -280,7 +294,7 @@ erDiagram
 
 | 항목 | 선택지 | 권장 | 언제까지 |
 |---|---|---|---|
-| 계정 삭제 | 사이트 안 버튼 / 문의로 처리 | 초기에는 문의로 처리하고 개인정보 페이지에 방법 명시 | 4단계 전 |
+| 계정 삭제 | 사이트 안 버튼 / 문의로 처리 | **확정 (2026-09-23): 문의로 처리.** `mondaylabs0132@gmail.com`, 개인정보 페이지에 명시 | 4단계 전 |
 | 로그인 후 기기 목록 처리 | 합친 뒤 비움(기본값) / 그대로 둠 | 비움 — 공용 기기에서 목록이 섞이지 않게 | 3단계 시작 전 |
 | 저장 해제 실행 취소 | 넣음 / 안 넣음 | 인수인계 §9.2 권고에 따라 넣되, 3단계 범위를 넘으면 별도 작업으로 분리 | 3단계 중 |
 

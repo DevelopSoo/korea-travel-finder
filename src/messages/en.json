@@ -184,7 +184,11 @@
   "saved": {
     "title": "Your next Korea starts here.",
     "lead": "A little collection of places and moments you want to come back to.",
-    "device": "Saved on this device. Clearing browser data may remove your list.",
+    "device": {
+      "guest": "Saved on this device. Clearing browser data may remove your list.",
+      "login": "Log in to see it on other devices",
+      "account": "Saved to your account. Log in on another device to see the same list."
+    },
     "heading": "Saved experiences",
     "countLabel": "{count} saved",
     "regionGuide": "View region guide",
@@ -198,11 +202,15 @@
   "privacy": {
     "title": "Privacy",
     "paragraphs": [
-      "Your saved list stays in this browser. We don't send it anywhere and we can't see it.",
-      "We don't ask for an account, and we don't collect your name or email to use this site.",
-      "Clearing your browser data clears your saved list with it.",
-      "Questions about your data? Reach us through the links at the bottom of any page."
-    ]
+      "You don't need an account to use this site. Without one, your saved list stays in this browser. We don't send it anywhere and we can't see it. Clearing your browser data clears the list with it.",
+      "An account is optional. If you create one, we keep your email address and your saved list so you can see the list on other devices. Your password is stored in a form we can't read. We don't ask for your name.",
+      "When you log in, the experiences saved in this browser move into your account and this browser's list is emptied. When you log out, your account's list doesn't stay on this device. A cookie keeps you logged in until you log out.",
+      "Accounts and saved lists are stored with Supabase, the database service this site runs on.",
+      "There's no password reset yet. If you forget your password, email us from the address you signed up with.",
+      "To delete your account, email us from the address you signed up with. Deleting your account deletes your saved list with it."
+    ],
+    "contact": "Contact",
+    "email": "mondaylabs0132@gmail.com"
   },
   "empty": {
     "notFound": {

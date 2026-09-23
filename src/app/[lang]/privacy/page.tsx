@@ -5,7 +5,7 @@ import { getMessages, hasLocale } from "@/messages";
 
 export const metadata: Metadata = { title: "Privacy" };
 
-// [7] 개인정보 안내 — 글만. 저장 목록이 브라우저에만 남는다는 게 요점이다
+// [7] 개인정보 안내 — 글만. 계정 없이는 브라우저에만, 계정을 만들면 계정에 남는다는 게 요점이다
 export default async function PrivacyPage({
   params,
 }: PageProps<"/[lang]/privacy">) {
@@ -29,6 +29,15 @@ export default async function PrivacyPage({
           {t.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+          <p>
+            {t.contact}:{" "}
+            <a
+              href={`mailto:${t.email}`}
+              className="font-semibold text-accent-press border-b-[1.5px] border-current break-all"
+            >
+              {t.email}
+            </a>
+          </p>
         </div>
       </article>
     </>

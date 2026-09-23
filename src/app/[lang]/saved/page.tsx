@@ -3,20 +3,20 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ButtonPrimary from "@/components/ui/ButtonPrimary";
 import CtaBand from "@/components/ui/CtaBand";
-import { Train } from "@/components/ui/icons";
 import { toCardItem } from "@/lib/cards";
 import { getPublishedExperiences } from "@/lib/experiences";
 import { getPublishedPlaces } from "@/lib/places";
 import { getMessages, hasLocale } from "@/messages";
 import SavedList, { type SavedItem } from "./SavedList";
+import SavedNote from "./SavedNote";
 
-// 저장 목록은 이 기기에만 있다 — 검색 결과에 올릴 내용이 없다
+// 저장 목록은 사람마다 다르다(이 기기 또는 계정) — 검색 결과에 올릴 내용이 없다
 export const metadata: Metadata = {
   title: "Saved",
   robots: { index: false },
 };
 
-// [6] 저장 — 이 브라우저에 담아 둔 경험
+// [6] 저장 — 이 브라우저 또는 계정에 담아 둔 경험
 export default async function SavedPage({ params }: PageProps<"/[lang]/saved">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
@@ -51,10 +51,7 @@ export default async function SavedPage({ params }: PageProps<"/[lang]/saved">) 
       <div className="mx-auto max-w-content pt-6 gutter">
         <h1 className="max-w-[16ch] text-display md:text-[58px]">{t.title}</h1>
         <p className="mt-3 font-display text-card text-ink-soft">{t.lead}</p>
-        <p className="mt-5.5 flex items-center gap-3 text-small text-ink-2">
-          <Train />
-          {t.device}
-        </p>
+        <SavedNote lang={lang} labels={t.device} />
 
         <SavedList
           items={items}
