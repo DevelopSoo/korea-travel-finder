@@ -21,6 +21,7 @@
 | 4-13 | `Select.tsx`                          | 드롭다운                                  |
 | 4-14 | `ExperienceCard.tsx` · `ExperienceCardWide.tsx` | 경험 카드 (세로형 / 넓은형)     |
 | 4-15 | `PlaceCard.tsx`                       | 장소 카드                                 |
+| 4-16 | `TextField.tsx`                       | 입력 칸 (로그인·가입)                     |
 | —    | `icons.tsx`                           | 선 아이콘 모음                            |
 
 카드가 받는 값은 `src/lib/cards.ts` 의 `CardItem` 하나로 맞춰 둔다.
@@ -139,3 +140,11 @@
 - 첫 화면과 장소 목록에만 쓴다.
 - **카드 전체가 링크다.** 사진 위에 단추를 얹지 않는다.
 - 모서리 2px — 카드 중에 가장 각졌다. 장소는 "사진 그 자체"에 가깝다.
+
+### 4-16. TextField
+
+- 라벨은 칸 **위**에 굵게(14px/600) 쓴다. `Select` 처럼 옆에 붙이지 않는다 — 칸이 폭을 다 쓴다.
+- 칸: 배경 `surface`, 테두리 `line-strong`, 모서리 5px(`Select` 와 같다), 글자 16px (폰에서 확대되지 않는 크기).
+- 누르면(focus) 테두리만 `ink` 로 진해진다. 빛나는 테두리·그림자를 쓰지 않는다.
+- `hint` 는 칸 밑 한 줄(13px, `ink-soft`). `invalid` 면 테두리만 `error` 가 되고, 오류 문구는 폼 아래 한곳에 `error` 색으로 쓴다.
+- 쓰는 자리: 로그인 페이지.
